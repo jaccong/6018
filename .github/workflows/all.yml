@@ -1,4 +1,7 @@
 name: all
+# 授予工作流写入仓库内容的权限
+permissions:
+  contents: write
 on:
    #push:
      #paths:
