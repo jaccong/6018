@@ -5,6 +5,12 @@ newnine = ''
 cqyx=''
 jsyd=''
 
+def simplify_guangdong(text):
+    # 正则匹配：广东开头的任意字符，强制截取前4个字（广东+2个字符）
+    pattern = r'(广东.{2})(?:.*?)(?=[,\s]|$)'
+    # 替换为捕获的前4个字（核心频道名）
+    return re.sub(pattern, r'\1', text)
+
 def simplify_cctv(text):
     # 正则表达式模式：匹配 CCTV-xx 开头的字符串
     # 解释：
@@ -59,7 +65,7 @@ kx=re.sub(r'广东大湾区','大湾区',kx)
 kx=re.sub(r'频备','',kx)
 kx=re.sub(r'(高清|标清|超清)','',kx)
 kx=re.sub(r'\[.*?\*.*?\]','',kx)
-kx1 = simplify_cctv(kx)
+kx1 = simplify_guangdong(simplify_cctv(kx))
 kxtt = re.findall(r'.*,http.*',kx1)
 
 all_links=fmm+test+itv
