@@ -37,7 +37,7 @@ jobs:
           git config --local user.email "jaccong@163.com"
           git config --local user.name "jaccong"
           if [ -n "$(git status --porcelain)" ]; then
-            git add *.txt *.m3u
+            git add *.txt
             git commit -m "Automatic update"
             git push
           else
