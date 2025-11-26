@@ -107,7 +107,6 @@ with open("108.txt", 'w', encoding='utf-8') as file:
     if '翡翠' in list or '千禧经典' in list or '美亚电影' in list:
       file.write(f'{list}\n')
       count=count+1
-  file.write(getlink('https://jaccong0520.serv00.net/tvb.txt')+'\n')
   file.write('央视频道,#genre#\nplayer=2\n')
   for list in total:
     if 'CCTV' in list or 'CHC' in list:
@@ -118,7 +117,6 @@ with open("108.txt", 'w', encoding='utf-8') as file:
     if '卫视' in list and '大湾区' not in list and '广东' not in list :
       file.write(f'{list}\n')
       count=count+1
-  ##file.write(getlink('http://jaccong0520.serv00.net/m2t/'))
  
   #file.write(getget('ty.txt'))
   time = re.findall(r'\[.*\:.*\].*\#genre\#.*',test,flags=re.DOTALL)
@@ -128,9 +126,3 @@ with open("108.txt", 'w', encoding='utf-8') as file:
       ##file.write(f'{taop}\n')
       ##file.write(f'{newnine}\n')
 content = '已更新频道'+str(count)+'个'
-
-##print(tztz)
-try:
-  tongzhi = requests.get(f'https://wxpusher.zjiecode.com/api/send/message/?appToken=AT_i6h9pkRP5dX8k4rMdcTQpnEzGLGliS2d&content={content}&uid=UID_GtnuIIpusCvI5YR95di5iuIiIrru')
-except Exception as e:
-  print(f'tongzhi-error:【{e}】')
