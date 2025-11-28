@@ -57,7 +57,7 @@ with open('test.txt', 'r', encoding='utf-8') as file:
 itv = getlink('https://kakaxi-1.asia/ipv4.txt')
 ##gxgx = getget('gxgx.txt')
 fmm = getlink('https://fanmingming.com/txt?url=https://kakaxi-1.asia/ipv6.m3u')
-kx = getlink('http://rihou.cc:555/gggg.nzk')
+kx = getlink('xxxhttp://rihou.cc:555/gggg.nzk')
 kx=re.sub(r'\S*翡翠\S*\,','翡翠台,',kx)
 kx=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',kx)
 kx=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',kx)
@@ -92,28 +92,21 @@ total = re.findall(r'.*,http.*',all_links)
 totalk = total + kxtt
 ##print(total)
 count=0
-gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视']
+gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视', '翡翠台']
 with open("108.txt", 'w', encoding='utf-8') as file:
   file.write('广东频道,#genre#\nplayer=2\n')
   for list in totalk:
     if any(keyword in list for keyword in gd_keywords):
       file.write(f'{list}\n')
       count=count+1
+  '''
   file.write('港澳频道,#genre#\nplayer=2\n')
-  '''
-  file.write('翡翠台,http://aktv.top/AKTV/live/aktv/null/AKTV.m3u8\n')
-  file.write('无线新闻台,http://aktv.top/AKTV/live/aktv/null-1/AKTV.m3u8\n')
-  file.write('千禧经典台,http://aktv.top/AKTV/live/aktv/null-15/AKTV.m3u8\n')
-  file.write('NOW星影台,http://aktv.top/AKTV/live/aktv2/now/AKTV.m3u8\n')
-  file.write('NOW爆谷台,http://aktv.top/AKTV/live/aktv2/null/AKTV.m3u8\n')
-  file.write('美亚电影台,http://aktv.top/AKTV/live/aktv/hk-1/AKTV.m3u8\n')
-  file.write('龙华电影台,http://aktv.top/AKTV/live/aktv/null-23/AKTV.m3u8\n')
-  file.write('靖天电影台,http://aktv.top/AKTV/live/aktv/null-6/AKTV.m3u8\n')
-  '''
+  
   for list in totalk:
     if '翡翠' in list or '千禧经典' in list or '美亚电影' in list:
       file.write(f'{list}\n')
       count=count+1
+  '''
   file.write('央视频道,#genre#\nplayer=2\n')
   for list in total:
     if 'CCTV' in list or 'CHC' in list:
