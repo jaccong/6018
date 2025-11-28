@@ -84,6 +84,7 @@ all_links=re.sub(r'\(.*\)','',all_links)
 all_links=re.sub(r'([\u4e00-\u9fff]+)\d+',r'\1',all_links)
 all_links=re.sub(r'粤语节目\d*','',all_links)
 all_links=re.sub(r'\S*翡翠\S*\,','翡翠台,',all_links)
+all_links=re.sub(r'\S*无线新闻\S*\,','无线新闻台,',all_links)
 all_links=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',all_links)
 all_links=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',all_links)
 
@@ -110,7 +111,7 @@ with open("108.txt", 'w', encoding='utf-8') as file:
   file.write('靖天电影台,http://aktv.top/AKTV/live/aktv/null-6/AKTV.m3u8\n')
   '''
   for list in totalk:
-    if '翡翠' in list or '千禧经典' in list or '美亚电影' in list:
+    if '翡翠' in list or '无线新闻' in list or '千禧经典' in list or '美亚电影' in list:
       file.write(f'{list}\n')
       count=count+1
   file.write('央视频道,#genre#\nplayer=2\n')
