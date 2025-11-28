@@ -111,7 +111,7 @@ with open("108.txt", 'w', encoding='utf-8') as file:
   file.write('靖天电影台,http://aktv.top/AKTV/live/aktv/null-6/AKTV.m3u8\n')
   '''
   for list in totalk:
-    if '翡翠' in list or '无线新闻' in list or '千禧经典' in list or '美亚电影' in list:
+    if '翡翠' in list or '千禧经典' in list or '美亚电影' in list:
       file.write(f'{list}\n')
       count=count+1
   file.write('央视频道,#genre#\nplayer=2\n')
