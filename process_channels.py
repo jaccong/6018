@@ -41,12 +41,13 @@ CHANNEL_ALIAS_MAP = {
     "广东体育": ["广体", "GD Sports", "广东体育频道", "广东体育台", "GD Sports Channel", "广体频道"],
     "广东新闻": ["广新", "GD News", "广东新闻频道", "广东新闻台", "GD News Channel", "广东新闻综合"],
     "广东珠江": ["珠江台", "GD Zhujiang", "广东珠江频道", "珠江卫视频道", "GD Pearl River Channel"],
-    "广东公共": ["广公", "GD Public", "广东公共频道", "广东公共民生频道", "GD Public Channel"],
+    "广东民生": ["广民", "GD Minsheng", "广东民生频道", "广东公共民生频道", "GD Minsheng Channel"],  # 修正：广东公共→广东民生
     "广东影视": ["广影", "GD Film", "广东影视频道", "广东电影频道", "GD Movie Channel", "广影视"],
     "广东综艺": ["广综", "GD Variety", "广东综艺频道", "广东综艺娱乐频道", "GD Variety Show Channel"],
     "广东少儿": ["广少", "GD Kids", "广东少儿频道", "广东儿童频道", "GD Children's Channel", "广东少儿台"],
-    "广东国际": ["广国际", "GD International", "广东国际频道", "GD Global Channel", "广东对外频道"],
-
+    "嘉佳卡通": ["嘉佳卫视", "GD Jiajia", "嘉佳卡通频道", "广东嘉佳卡通", "Jiajia Cartoon Channel", "嘉佳台"],
+    # 新增：大湾区卫视
+    "大湾区卫视": ["广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
     # 二、央视含数字主要频道（仅核心数字频道，别名覆盖“央视X套”“XX频道”“英文缩写”）
     "CCTV1": ["央视一套", "综合频道", "CCTV-1", "CCTV One", "央视综合", "一套"],
     "CCTV2": ["央视二套", "财经频道", "CCTV-2", "CCTV Finance", "央视财经", "二套"],
@@ -66,7 +67,6 @@ CHANNEL_ALIAS_MAP = {
     "CCTV15": ["央视十五套", "音乐频道", "CCTV-15", "CCTV Music", "央视音乐", "十五套", "音乐台"],
     "CCTV16": ["央视十六套", "奥林匹克频道", "CCTV-16", "CCTV Olympic", "央视奥运频道", "十六套"],
     "CCTV17": ["央视十七套", "农业农村频道", "CCTV-17", "CCTV Agriculture", "央视农业农村", "十七套"],
-
     # 三、常见主要卫视频道（仅核心主流卫视，别名覆盖简称、昵称、英文、缩写）
     "湖南卫视": ["芒果台", "HNTV", "湖南卫视频道", "湘卫", "Hunan TV", "芒果卫视", "湖南台"],
     "浙江卫视": ["浙卫", "ZJTV", "浙江卫视频道", "蓝莓台", "Zhejiang TV", "浙台", "浙江台"],
@@ -92,7 +92,6 @@ CHANNEL_ALIAS_MAP = {
     "海南卫视": ["琼卫", "Hainan TV", "海南卫视频道", "旅游卫视", "Hainan Tourism TV", "琼台"],
     "山西卫视": ["晋卫", "SXTV", "山西卫视频道", "黄河台", "Shanxi TV", "晋台", "山西台"],
     "陕西卫视": ["陕卫", "SXTVS", "陕西卫视频道", "华夏台", "Shaanxi TV", "陕台", "陕西台"],
-
     # 四、港澳台常见主要频道（仅核心主流频道，别名覆盖简称、英文、当地叫法）
     "TVB翡翠台": ["翡翠台", "无线翡翠台", "无线翡翠", "Jade TV", "TVB Jade", "翡翠卫视", "无线台"],
     "TVB明珠台": ["明珠台", "Pearl TV", "TVB Pearl", "无线明珠台", "明珠卫视", "英文台"],
@@ -112,7 +111,11 @@ CHANNEL_ALIAS_MAP = {
     "台湾TVBS": ["TVBS", "TVBS主频", "TVBS综合台", "TVBS Main Channel", "联意电视"],
     "台湾八大综合台": ["八大综合", "GTV Variety", "八大台", "GTV综合台", "GTV Variety Channel"],
     "台湾三立新闻台": ["三立新闻", "SET News", "三立台", "SET News Channel", "三立新闻频道"],
-    "台湾东森新闻台": ["东森新闻", "ETtoday News", "东森台", "ET News Channel", "东森新闻频道"]
+    "台湾东森新闻台": ["东森新闻", "ETtoday News", "东森台", "ET News Channel", "东森新闻频道"],
+    # 新增：港澳台指定频道
+    "无线新闻台": ["TVB News", "无线新闻频道", "TVB新闻台", "香港无线新闻", "News Channel","无线新闻"],
+    "千禧经典台": ["千禧台", "Millennium Classic", "经典台", "千禧经典频道", "Millennium Channel"],
+    "美亚电影台": ["美亚影台", "Meiya Movies", "美亚电影频道", "Meiya Film Channel", "MA Movies"]
 }
 # -------------------------- 测试：别名场景处理效果 --------------------------
 input_multiline_text = """
