@@ -4,6 +4,9 @@ taop = ''
 newnine = ''
 cqyx=''
 jsyd=''
+from process_channels import process_channel_with_alias
+from process_channels import process_multiline_text
+from process_channels import CHANNEL_ALIAS_MAP
 
 def simplify_guangdong(text):
     # 正则匹配：广东开头的任意字符，强制截取前4个字（广东+2个字符）
@@ -57,7 +60,9 @@ with open('test.txt', 'r', encoding='utf-8') as file:
 itv = getlink('https://kakaxi-1.asia/ipv4.txt')
 ##gxgx = getget('gxgx.txt')
 fmm = getlink('https://fanmingming.com/txt?url=https://kakaxi-1.asia/ipv6.m3u')
-kx = getlink('xxxhttp://rihou.cc:555/gggg.nzk')
+kx = getlink('http://rihou.cc:555/gggg.nzk')
+shulao = getlink('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
+bcitv = getlink('https://188766.xyz/itv')
 kx=re.sub(r'\S*翡翠\S*\,','翡翠台,',kx)
 kx=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',kx)
 kx=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',kx)
@@ -65,7 +70,10 @@ kx=re.sub(r'广东大湾区','大湾区',kx)
 kx=re.sub(r'频备','',kx)
 kx=re.sub(r'(高清|标清|超清)','',kx)
 kx=re.sub(r'\[.*?\*.*?\]','',kx)
-kx1 = simplify_guangdong(simplify_cctv(kx))
+
+kx=kx + '\n' + bcitv + '\n' + shulao
+kx1 = process_multiline_text(kx, CHANNEL_ALIAS_MAP)
+##kx1 = simplify_guangdong(simplify_cctv(kx))
 kxtt = re.findall(r'.*,http.*',kx1)
 
 all_links=fmm+test+itv
