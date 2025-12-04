@@ -62,7 +62,7 @@ itv = getlink('https://kakaxi-1.asia/ipv4.txt')
 fmm = getlink('https://fanmingming.com/txt?url=https://kakaxi-1.asia/ipv6.m3u')
 kx = getlink('http://rihou.cc:555/gggg.nzk')
 shulao = getlink('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
-bcitv = getlink('https://188766.xyz/itv')
+bcitv = getlink('https://877622.xyz/m2t.php?url=https://188766.xyz/itv')
 kx=re.sub(r'\S*翡翠\S*\,','翡翠台,',kx)
 kx=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',kx)
 kx=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',kx)
@@ -100,7 +100,7 @@ total = re.findall(r'.*,http.*',all_links)
 totalk = total + kxtt
 ##print(total)
 count=0
-gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视', '翡翠台']
+gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视', '翡翠台','无线新闻']
 with open("108.txt", 'w', encoding='utf-8') as file:
   file.write('广东频道,#genre#\nplayer=2\n')
   for list in totalk:
