@@ -95,7 +95,7 @@ all_links=re.sub(r'\S*翡翠\S*\,','翡翠台,',all_links)
 all_links=re.sub(r'\S*无线新闻\S*\,','无线新闻台,',all_links)
 all_links=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',all_links)
 all_links=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',all_links)
-
+all_links = process_multiline_text(all_links, CHANNEL_ALIAS_MAP)
 total = re.findall(r'.*,http.*',all_links)
 totalk = total + kxtt
 ##print(total)
