@@ -7,6 +7,8 @@ jsyd=''
 from process_channels import process_channel_with_alias
 from process_channels import process_multiline_text
 from process_channels import CHANNEL_ALIAS_MAP
+from channel_sorter import main
+from channel_sorter import custom_order
 
 def simplify_guangdong(text):
     # 正则匹配：广东开头的任意字符，强制截取前4个字（广东+2个字符）
@@ -73,10 +75,10 @@ kx=re.sub(r'(高清|标清|超清)','',kx)
 kx=re.sub(r'\[.*?\*.*?\]','',kx)
 
 kx = kx + bcitv + shulao
-kx1 = process_multiline_text(kx, CHANNEL_ALIAS_MAP)
+##kx1 = process_multiline_text(kx, CHANNEL_ALIAS_MAP)
 
 ##kx1 = simplify_guangdong(simplify_cctv(kx))
-kxtt = re.findall(r'.*\,.*:\/\/.*',kx1)
+##kxtt = re.findall(r'.*\,.*:\/\/.*',kx1)
 
 all_links=fmm+test+itv
 all_links=re.sub(r'[a-zA-Z]+\,',',',all_links)
@@ -97,36 +99,38 @@ all_links=re.sub(r'\S*翡翠\S*\,','翡翠台,',all_links)
 all_links=re.sub(r'\S*无线新闻\S*\,','无线新闻台,',all_links)
 all_links=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',all_links)
 all_links=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',all_links)
-all_links = process_multiline_text(all_links, CHANNEL_ALIAS_MAP)
+all_links = process_multiline_text(all_links + kx, CHANNEL_ALIAS_MAP)
 total = re.findall(r'.*\,.*:\/\/.*',all_links)
-totalk = total + kxtt
+
 ##print(total)
 count=0
 gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视', '翡翠台','无线新闻']
+ys_keywords =['CCTV1', 'CCTV2', 'CCTV3', 'CCTV4', 'CCTV5', 'CCTV6', 'CCTV7', 'CCTV8', 'CCTV9', 'CCTV10', 'CCTV11', 'CCTV12', 'CCTV13', 'CCTV14', 'CCTV15', 'CCTV16', 'CCTV17','CHC家庭影院','CHC动作电影','CHC影迷电影']
+ws_keywords = ['卫视']
 remove_keywords = ['smt','smart','Smart']
 
 with open("108.txt", 'w', encoding='utf-8') as file:
   file.write('广东频道,#genre#\nplayer=2\n')
-  for list in totalk:
+  for list in total:
     if any(keyword in list for keyword in gd_keywords) and all(key not in list for key in remove_keywords):
       file.write(f'{list}\n')
       count=count+1
   '''
   file.write('港澳频道,#genre#\nplayer=2\n')
   
-  for list in totalk:
+  for list in total:
     if '翡翠' in list or '千禧经典' in list or '美亚电影' in list:
       file.write(f'{list}\n')
       count=count+1
   '''
   file.write('央视频道,#genre#\nplayer=2\n')
-  for list in totalk:
-    if 'CCTV' in list or 'CHC' in list:
+  for list in total:
+    if any(keyword in list for keyword in ys_keywords) and all(key not in list for key in remove_keywords):
       file.write(f'{list}\n')
       count=count+1
   file.write('卫视频道,#genre#\nplayer=2\n')
-  for list in totalk:
-    if '卫视' in list and '大湾区' not in list and '广东' not in list :
+  for list in total:
+    if any(keyword in list for keyword in ws_keywords) and all(key not in list for key in remove_keywords):
       file.write(f'{list}\n')
       count=count+1
  
