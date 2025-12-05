@@ -49,7 +49,7 @@ CHANNEL_ALIAS_MAP = {
     # 新增：大湾区卫视
     "大湾区卫视": ["广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
     # 二、央视含数字主要频道（仅核心数字频道，别名覆盖“央视X套”“XX频道”“英文缩写”）
-    "CCTV1": ["央视一套", "综合频道", "CCTV-1", "CCTV One", "央视综合", "一套"],
+    "CCTV1": ["央视一套", "综合频道", "CCTV-1", "CCTV One", "央视综合", "一套","CCTV-1 综合"],
     "CCTV2": ["央视二套", "财经频道", "CCTV-2", "CCTV Finance", "央视财经", "二套"],
     "CCTV3": ["央视三套", "综艺频道", "CCTV-3", "CCTV Variety", "央视综艺", "三套"],
     "CCTV4": ["央视四套", "中文国际频道", "CCTV-4", "CCTV International", "央视中文国际", "四套"],
