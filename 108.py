@@ -74,7 +74,7 @@ kx=re.sub(r'\[.*?\*.*?\]','',kx)
 
 kx666 = kx + bcitv + shulao
 kx1 = process_multiline_text(kx666, CHANNEL_ALIAS_MAP)
-print(kx1)
+
 ##kx1 = simplify_guangdong(simplify_cctv(kx))
 kxtt = re.findall(r'.*\,.*:\/\/.*',kx1)
 print(kxtt)
