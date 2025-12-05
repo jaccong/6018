@@ -63,8 +63,7 @@ fmm = getlink('https://fanmingming.com/txt?url=https://kakaxi-1.asia/ipv6.m3u')
 kx = getlink('http://rihou.cc:555/gggg.nzk')
 shulao = getlink('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
 bcitv = getlink('https://877622.xyz/m2t.php?url=https://188766.xyz/itv')
-bcbc = re.findall(r'.*\,.*:\/\/.*',bcitv)
-print(bcbc)
+
 kx=re.sub(r'\S*翡翠\S*\,','翡翠台,',kx)
 kx=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',kx)
 kx=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',kx)
@@ -75,8 +74,10 @@ kx=re.sub(r'\[.*?\*.*?\]','',kx)
 
 kx666 = kx + bcitv + shulao
 kx1 = process_multiline_text(kx666, CHANNEL_ALIAS_MAP)
+print(kx1)
 ##kx1 = simplify_guangdong(simplify_cctv(kx))
 kxtt = re.findall(r'.*\,.*:\/\/.*',kx1)
+print(kxtt)
 
 all_links=fmm+test+itv
 all_links=re.sub(r'[a-zA-Z]+\,',',',all_links)
