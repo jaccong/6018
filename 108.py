@@ -73,8 +73,8 @@ kx=re.sub(r'频备','',kx)
 kx=re.sub(r'(高清|标清|超清)','',kx)
 kx=re.sub(r'\[.*?\*.*?\]','',kx)
 
-kx = kx + '\n' + bcitv + '\n' + shulao
-kx1 = process_multiline_text(kx, CHANNEL_ALIAS_MAP)
+kx666 = kx + bcitv + shulao
+kx1 = process_multiline_text(kx666, CHANNEL_ALIAS_MAP)
 ##kx1 = simplify_guangdong(simplify_cctv(kx))
 kxtt = re.findall(r'.*\,.*:\/\/.*',kx1)
 
@@ -98,7 +98,7 @@ all_links=re.sub(r'\S*无线新闻\S*\,','无线新闻台,',all_links)
 all_links=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',all_links)
 all_links=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',all_links)
 all_links = process_multiline_text(all_links, CHANNEL_ALIAS_MAP)
-total = re.findall(r'.*,http.*',all_links)
+total = re.findall(r'.*\,.*:\/\/.*',all_links)
 totalk = total + kxtt
 ##print(total)
 count=0
