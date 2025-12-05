@@ -103,10 +103,12 @@ totalk = total + kxtt
 ##print(total)
 count=0
 gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视', '翡翠台','无线新闻']
+remove_keywords = ['smt','smart','Smart']
+
 with open("108.txt", 'w', encoding='utf-8') as file:
   file.write('广东频道,#genre#\nplayer=2\n')
   for list in totalk:
-    if any(keyword in list for keyword in gd_keywords):
+    if any(keyword in list for keyword in gd_keywords) and all(key not in list for key in remove_keywords):
       file.write(f'{list}\n')
       count=count+1
   '''
