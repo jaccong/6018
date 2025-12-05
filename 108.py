@@ -108,8 +108,8 @@ count=0
 gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视', '翡翠台','无线新闻']
 ys_keywords =['CCTV1', 'CCTV2', 'CCTV3', 'CCTV4', 'CCTV5', 'CCTV6', 'CCTV7', 'CCTV8', 'CCTV9', 'CCTV10', 'CCTV11', 'CCTV12', 'CCTV13', 'CCTV14', 'CCTV15', 'CCTV16', 'CCTV17','CHC家庭影院','CHC动作电影','CHC影迷电影']
 ws_keywords = ['卫视']
-remove_keywords = ['smt','smart','Smart','cmvideo']
-ws_remove_keywords = ['smt','smart','Smart','cmvideo','大湾区卫视','广东卫视']
+remove_keywords = ['smt','smart','Smart','cmvideo','/rtp/','/udp/']
+ws_remove_keywords = remove_keywords + ['大湾区卫视','广东卫视']
 
 with open("108.txt", 'w', encoding='utf-8') as file:
   file.write('广东频道,#genre#\nplayer=2\n')
