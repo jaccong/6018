@@ -15,15 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-        
+        uses: actions/checkout@v4  # 升级到最新版，更稳定
+
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5  # 升级到最新版
         with:
           python-version: 3.x
           
       - name: Install dependencies
-        run: pip install opencv-python requests 
+        run: pip install requests 
         
       ##- name: Run all
       ##  run: python ${{ github.workspace }}/all.py 
