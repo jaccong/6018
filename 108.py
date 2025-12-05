@@ -59,13 +59,13 @@ with open('test.txt', 'r', encoding='utf-8') as file:
   test = re.sub(r'TVBPlus.*','',test)
 
 ##iptv = getlink('')
-itv = getlink('https://kakaxi-1.asia/ipv4.txt')
+##itv = getlink('https://kakaxi-1.asia/ipv4.txt')
 ##gxgx = getget('gxgx.txt')
 fmm = getlink('https://fanmingming.com/txt?url=https://kakaxi-1.asia/ipv6.m3u')
-kx = getlink('http://rihou.cc:555/gggg.nzk')
+rihou = getlink('http://rihou.cc:555/gggg.nzk')
 shulao = getlink('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
 bcitv = getlink('https://877622.xyz/m2t.php?url=https://188766.xyz/itv')
-
+aptv = getlink('https://fanmingming.com/txt?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u')
 kx=re.sub(r'\S*翡翠\S*\,','翡翠台,',kx)
 kx=re.sub(r'\S*千禧经典\S*\,','千禧经典台,',kx)
 kx=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',kx)
@@ -74,13 +74,13 @@ kx=re.sub(r'频备','',kx)
 kx=re.sub(r'(高清|标清|超清)','',kx)
 kx=re.sub(r'\[.*?\*.*?\]','',kx)
 
-kx = kx + bcitv + shulao
+kx = aptv + bcitv + rihou + shulao
 ##kx1 = process_multiline_text(kx, CHANNEL_ALIAS_MAP)
 
 ##kx1 = simplify_guangdong(simplify_cctv(kx))
 ##kxtt = re.findall(r'.*\,.*:\/\/.*',kx1)
 
-all_links=fmm+test+itv
+all_links=fmm+test
 all_links=re.sub(r'[a-zA-Z]+\,',',',all_links)
 all_links=re.sub('超清','',all_links)
 all_links=re.sub('home','',all_links)
