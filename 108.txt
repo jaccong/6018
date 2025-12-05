@@ -139,11 +139,11 @@ TVB翡翠台,https://smt.1678520.xyz/smt3.2.1.php?id=jade_twn
 TVB翡翠台,https://cdn9.163189.xyz/smt3.1.1.php?id=jade_twn
 无线新闻台,https://cdn9.163189.xyz/smt1.1.php?id=inews_twn
 TVB翡翠台,https://cdn9.163189.xyz/smt1.1.php?id=jade_twn
-广东珠江,https://smt.go-iptv.ggff.net/smart.php?id=zhujiang&token=Goiptv
-无线新闻台,https://smt.go-iptv.ggff.net/smart.php?id=inews_twn&token=Goiptv
-TVB翡翠台,https://smt.go-iptv.ggff.net/smart.php?id=jade_twn&token=Goiptv
-TVB翡翠台,https://smt.go-iptv.ggff.net/smart.php?id=Jade_xue&token=Goiptv
-TVB翡翠台,https://smt.go-iptv.ggff.net/smart.php?id=Tvbjade&token=Goiptv
+广东珠江,http://jp.809899.xyz/smt.php?id=zhujiang
+无线新闻台,http://jp.809899.xyz/smt.php?id=inews_twn
+TVB翡翠台,http://jp.809899.xyz/smt.php?id=jade_twn
+TVB翡翠台,http://jp.809899.xyz/smt.php?id=Jade_xue
+TVB翡翠台,http://jp.809899.xyz/smt.php?id=Tvbjade
 广东珠江,https://tzh911.qzz.io/play-smt.php?id=zhujiang
 广东珠江,http://156.239.254.7:5555/smt.php?id=zhujiang
 无线新闻台,https://tzh911.qzz.io/play-smt.php?id=inews_twn
@@ -166,7 +166,7 @@ TVB翡翠台,http://beishan008.asuscomm.com:8889/bysid/1.m3u8
 嘉佳卡通,http://tvtj1.jxwltx.com:8003/live1328.m3u8
 广东卫视,http://tvtj.jxwltx.com:8003/gdws.m3u8
 广东卫视,http://180.114.162.2:2380/c3.cdn.hunancatv.com/live/gdws4K.m3u8
-TVB翡翠台,https://smt.go-iptv.ggff.net/smart.php?id=Tvbjade&token=Goiptv
+TVB翡翠台,http://jp.809899.xyz/smt.php?id=Tvbjade
 TVB翡翠台,https://tzh911.qzz.io/play-smt.php?id=Tvbjade
 TVB翡翠台,http://156.239.254.7:5555/smt.php?id=Tvbjade
 广东卫视,https://migu.188766.xyz/?migutoken=0d488d463ece211cdc52c6824e6e6d74&id=%E5%B9%BF%E4%B8%9C%E5%8D%AB%E8%A7%86&type=yy
@@ -364,8 +364,8 @@ CCTV2,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/322
 CCTV2,http://m.061899.xyz/mg/cctv2
 CCTV3,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/3221226456/1.m3u8
 CCTV3,http://m.061899.xyz/mg/cctv3
-CCTV4,http://111.20.109.150:6610/yinhe/2/ch00000090990000001015/index.m3u9?virtualDomain=yinhe.live_hls.zte.com
 CCTV4,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/3221226470/1.m3u8
+CCTV4,http://111.20.109.150:6610/yinhe/2/ch00000090990000001015/index.m3u9?virtualDomain=yinhe.live_hls.zte.com
 CCTV4,http://m.061899.xyz/mg/cctv4
 CCTV5,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/3221226469/1.m3u8
 CCTV5,http://m.061899.xyz/mg/cctv5
@@ -393,8 +393,8 @@ CCTV14,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/32
 CCTV14,http://m.061899.xyz/mg/cctv14
 CCTV15,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/3221226460/1.m3u8
 CCTV15,http://m.061899.xyz/mg/cctv15
-CCTV16,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/3221226888/1.m3u8
 CCTV16,http://111.20.109.150:6610/yinhe/2/ch00000090990000002395/index.m3u9?virtualDomain=yinhe.live_hls.zte.com
+CCTV16,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/3221226888/1.m3u8
 CCTV16,http://m.061899.xyz/mg/cctv16
 CCTV17,http://122.70.160.24:2380/ywotttv.bj.chinamobile.com/PLTV/88888888/224/3221226318/1.m3u8
 CCTV17,http://m.061899.xyz/mg/cctv17
