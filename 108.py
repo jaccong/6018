@@ -120,12 +120,12 @@ with open("108.txt", 'w', encoding='utf-8') as file:
       count=count+1
   '''
   file.write('央视频道,#genre#\nplayer=2\n')
-  for list in total:
+  for list in totalk:
     if 'CCTV' in list or 'CHC' in list:
       file.write(f'{list}\n')
       count=count+1
   file.write('卫视频道,#genre#\nplayer=2\n')
-  for list in total:
+  for list in totalk:
     if '卫视' in list and '大湾区' not in list and '广东' not in list :
       file.write(f'{list}\n')
       count=count+1
