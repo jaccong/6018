@@ -74,18 +74,15 @@ jobs:
             echo "file_exists=false" >> $GITHUB_ENV
           fi
 
-      - name: 提交更新到仓库
-        if: env.file_exists == 'true'
+      - name: 提交更改
         run: |
           git config --local user.email "jaccong@163.com"
           git config --local user.name "jaccong"
-          BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          git pull --rebase origin $BRANCH || true
-          git add test.txt
-          git commit -m "Automatic update IPTV list: $(date +'%Y-%m-%d %H:%M:%S')" || echo "无更新内容，跳过提交"
-          git push origin $BRANCH
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git add .
+          git commit *.txt -m "Automatic update"
+          #git commit *.m3u -m "Automatic update"
+          #git pull --rebase
+          git push -f
 
       - name: 输出运行结果
         run: |
