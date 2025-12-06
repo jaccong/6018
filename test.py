@@ -7,447 +7,468 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import requests
 import re
-import os
+from collections import defaultdict
 import threading
-from queue import Queue
-tztz=''
-with open('ip.txt', 'r', encoding='utf-8') as file:
-  iplist = file.read()
-now = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('[%m/%d %H:%M]')
-daiceshi=[]
-urls = [
-    "fromiptxt",
-    "https://raw.githubusercontent.com/jaccong/iptv-api/master/output/user_result.txt",
-    "http://rihou.cc:555/gggg.nzk",
-    "http://v.taoiptv.cn/source/iptv.txt?token=14lz2iq8cpo2sko4",
-    ##"https://fofa.info/result?qbase64=ImlwdHYvbGl2ZS96aF9jbi5qcyIgJiYgY2l0eT0iTWVpemhvdSI%3D",#梅州
-    ##"https://fofa.info/result?qbase64=Ii9pcHR2L2xpdmUvemhfY24uanMiICYmIGNvdW50cnk9IkNOIiAmJiBvcmc9IkNoaW5hbmV0Ig%3D%3D",#全国
-    "https://fofa.info/result?qbase64=ImlwdHYvbGl2ZS96aF9jbi5qcyIgJiYgcmVnaW9uPSJHdWFuZ2Rvbmci",#Guangdong
-    "https://fofa.info/result?qbase64=ImlwdHYvbGl2ZS96aF9jbi5qcyIgJiYgcmVnaW9uPSJHdWFuZ3hpIFpodWFuZ3p1Ig=="#广西
-    ##"https://fofa.info/result?qbase64=ImlwdHYiICYmIGNpdHk9Ill1bGluIiAmJiBwb3J0PSI4MTgxIg%3D%3D"#广西玉林
-]
-  
+import os
+
+# 核心配置
+TIMEOUT = 1.0  # IP扫描超时
+CHANNEL_TIMEOUT = 3.0  # 频道检测超时（含分辨率解析，稍长）
+MAX_WORKERS = 500
+RETRY_TIMES = 1
+RETRY_INTERVAL = 0.02
+IP_SEGMENT_RANGE = range(1, 256)
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "*/*",
+    "Connection": "keep-alive"
+}
+
+# 分辨率优先级映射（中文关键词+完整字符串）
+RESOLUTION_PRIORITY = {
+    '4K': 10, '2160p': 10, '超高清': 10,
+    '1080p': 9, 'FHD': 9, '全高清': 9,
+    '720p': 8, 'HD': 8, '高清': 8,
+    '480p': 7, 'SD': 7, '标清': 7,
+    '360p': 6, '流畅': 6,
+    '240p': 5,
+    '未知': 1
+}
+
+# 全局会话
+session = requests.Session()
+session.headers.update(HEADERS)
+
+# 线程安全计数器
+scan_counter = 0
+valid_counter = 0
+channel_scan_counter = 0
+channel_valid_counter = 0
+lock = threading.Lock()
+
 def modify_urls(url):
     modified_urls = []
-    ip_start_index = url.find("//") + 2
-    ip_end_index = url.find(":", ip_start_index)
-    base_url = url[:ip_start_index]  # http:// or https://
-    ip_address = url[ip_start_index:ip_end_index]
-    port = url[ip_end_index:]
-    ip_end = "/iptv/live/1000.json?key=txiptv"
-    for i in range(1, 256):
-        modified_ip = f"{ip_address[:-1]}{i}"
-        modified_url = f"{base_url}{modified_ip}{port}{ip_end}"
-        modified_urls.append(modified_url)
-
+    try:
+        if url.startswith('https://'):
+            ip_start_index = url.find("https://") + 8
+            base_url = "https://"
+        else:
+            ip_start_index = url.find("//") + 2
+            base_url = "http://"
+        
+        ip_end_index = url.find(":", ip_start_index)
+        if ip_end_index == -1:
+            return modified_urls
+        
+        ip_address = url[ip_start_index:ip_end_index]
+        port = url[ip_end_index:]
+        ip_end = "/iptv/live/1000.json?key=txiptv"
+        
+        ip_parts = ip_address.split(".")
+        if len(ip_parts) != 4:
+            return modified_urls
+        ip_prefix = ".".join(ip_parts[:3])
+        
+        for i in IP_SEGMENT_RANGE:
+            modified_ip = f"{ip_prefix}.{i}"
+            modified_url = f"{base_url}{modified_ip}{port}{ip_end}"
+            modified_urls.append(modified_url.strip())
+    except Exception as e:
+        print(f"【URL扩展失败】基础URL：{url}（错误：{str(e)[:50]}）")
+        pass
     return modified_urls
 
-def is_url_accessible(url):
-    try:
-        response = requests.get(url, timeout=0.5)
-        if response.status_code == 200:
-            print(f'{url} 【 有 效 】')
-            return url
-    except requests.exceptions.RequestException:
-        pass
+def validate_base_url(url):
+    pattern = r"https?://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+"
+    return re.match(pattern, url) is not None
+
+def request_with_retry(url, method="GET", timeout=TIMEOUT, **kwargs):
+    kwargs.setdefault("headers", HEADERS)
+    kwargs.setdefault("timeout", timeout)
+    for _ in range(RETRY_TIMES + 1):
+        try:
+            response = session.request(method, url, **kwargs)
+            if response.status_code in [200, 302]:
+                return response
+        except requests.exceptions.RequestException:
+            time.sleep(RETRY_INTERVAL)
     return None
 
+def is_url_accessible(url):
+    global scan_counter, valid_counter
+    response = request_with_retry(url)
+    with lock:
+        scan_counter += 1
+        if scan_counter % 500 == 0:
+            print(f"【IP扫描进度】已完成 {scan_counter} 个URL，当前可用 {valid_counter} 个")
+        if response:
+            valid_counter += 1
+            return url
+    return None
 
-results = []
-resultshd = []
-x_urls = []
-for url in urls:
-    if "iptxt" not in url:
-      # 创建一个Chrome WebDriver实例
-      chrome_options = Options()
-      chrome_options.add_argument('--headless')
-      chrome_options.add_argument('--no-sandbox')
-      chrome_options.add_argument('--disable-dev-shm-usage')
-      # 选用主流浏览器的User-Agent（可替换为其他浏览器的UA）
-      USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-      chrome_options.add_argument(f'--user-agent={USER_AGENT}')
-      driver = webdriver.Chrome(options=chrome_options)
-      # 使用WebDriver访问网页
-      try:
-          driver.get(url)  # 将网址替换为你要访问的网页地址
-      except:
-          print("访问出错："+url)
-      time.sleep(10)
-      # 获取网页内容
-      page_content = driver.page_source
-      # 关闭WebDriver
-      driver.quit()
-    else:
-      page_content = iplist
-    # 查找所有符合指定格式的网址
-    #pattern = r"http://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+|http://\w+\.\w+\.\w+:\d+"  # 设置匹配的格式，如http://8.8.8.8:8888
-    pattern = r"http://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+"
-    urls_all = re.findall(pattern, page_content)
-    # urls = list(set(urls_all))  # 去重得到唯一的URL列表
-    urls = set(urls_all)  # 去重得到唯一的URL列表
+def parse_resolution(m3u8_content, channel_name):
+    """解析M3U8内容获取分辨率，无则从名称推测"""
+    # 从M3U8 #EXT-X-STREAM-INF中提取带宽/分辨率
+    stream_inf_pattern = r"#EXT-X-STREAM-INF:.*?(BANDWIDTH=(\d+)|RESOLUTION=(\d+x\d+))"
+    matches = re.findall(stream_inf_pattern, m3u8_content, re.IGNORECASE)
+    resolution = '未知'
     
-    ##x_urls = []
-    for url in urls:  # 对urls进行处理，ip第四位修改为1，并去重
-        url = url.strip()
-        ip_start_index = url.find("//") + 2
-        ip_end_index = url.find(":", ip_start_index)
-        ip_dot_start = url.find(".") + 1
-        ip_dot_second = url.find(".", ip_dot_start) + 1
-        #ip_dot_three = url.find(".", ip_dot_second) + 1
-        base_url = url[:ip_start_index]  # http:// or https://
-        port = url[ip_end_index:]
-      
-        ip_dot_three = url.find(".", ip_dot_second)
-        ip_address_12 = url[ip_start_index:ip_dot_second]
-        ip_address_3 = int(url[ip_dot_second:ip_dot_three])
-        x_url_0 = f"{base_url}{ip_address_12}{str(ip_address_3-2)}.1{port}"  
-        x_url_1 = f"{base_url}{ip_address_12}{str(ip_address_3-1)}.1{port}"
-        x_url_2 = f"{base_url}{ip_address_12}{str(ip_address_3)}.1{port}"
-        x_url_3 = f"{base_url}{ip_address_12}{str(ip_address_3+1)}.1{port}"
-        x_url_4 = f"{base_url}{ip_address_12}{str(ip_address_3+2)}.1{port}"
-        x_urls.append(x_url_0)
-        x_urls.append(x_url_1)
-        x_urls.append(x_url_2)
-        x_urls.append(x_url_3)
-        x_urls.append(x_url_4)
-      #######
-        #ip_address = url[ip_start_index:ip_dot_three]
-        #port = url[ip_end_index:]
-        #ip_end = "1"
-        #modified_ip = f"{ip_address}{ip_end}"
-        #x_url = f"{base_url}{modified_ip}{port}"
-        #x_urls.append(x_url)
-      #######
+    # 从分辨率字段提取
+    for match in matches:
+        if match[2]:  # RESOLUTION=1920x1080
+            w, h = match[2].split('x')
+            h = int(h)
+            if h >= 2160:
+                resolution = '2160p'
+            elif h >= 1080:
+                resolution = '1080p'
+            elif h >= 720:
+                resolution = '720p'
+            elif h >= 480:
+                resolution = '480p'
+            elif h >= 360:
+                resolution = '360p'
+            break
+    
+    # 从带宽推测（备用）
+    if resolution == '未知':
+        for match in matches:
+            if match[1]:  # BANDWIDTH=1000000
+                bandwidth = int(match[1])
+                if bandwidth >= 20000000:
+                    resolution = '4K'
+                elif bandwidth >= 5000000:
+                    resolution = '1080p'
+                elif bandwidth >= 2000000:
+                    resolution = '720p'
+                elif bandwidth >= 1000000:
+                    resolution = '480p'
+                break
+    
+    # 从频道名称推测（最终备用）
+    # 中文关键词兜底
+    if resolution == '未知':
+        name_lower = channel_name.lower()
+        if any(kw in name_lower for kw in ['4k', '2160p', '超高清']):
+            resolution = '4K'
+        elif any(kw in name_lower for kw in ['1080p', 'fhd', '全高清']):
+            resolution = '1080p'
+        elif any(kw in name_lower for kw in ['720p', 'hd', '高清']):
+            resolution = '720p'
+        elif any(kw in name_lower for kw in ['480p', 'sd', '标清']):
+            resolution = '480p'
+        elif any(kw in name_lower for kw in ['360p', '流畅']):
+            resolution = '360p'
+    
+    return resolution
 
-    urls = set(x_urls)  # 去重得到唯一的URL列表
-    #print(urls)
-    valid_urls = []
-    #   多线程获取可用url
-with concurrent.futures.ThreadPoolExecutor(max_workers=500) as executor:
-     futures = []
-     for url in urls:
-         url = url.strip()
-         modified_urls = modify_urls(url)
-         for modified_url in modified_urls:
-             futures.append(executor.submit(is_url_accessible, modified_url))
-
-     for future in concurrent.futures.as_completed(futures):
-         result = future.result()
-         if result:
-            valid_urls.append(result)
-     '''
-     for url in valid_urls:
-         print(f'{url} 【 有 效 】')
-     '''
-    # 遍历网址列表，获取JSON文件并解析
-for url in valid_urls:
-    try:
-        # 发送GET请求获取JSON文件，设置超时时间为0.5秒
-        ip_start_index = url.find("//") + 2
-        ip_dot_start = url.find(".") + 1
-        ip_index_second = url.find("/", ip_dot_start)
-        base_url = url[:ip_start_index]  # http:// or https://
-        ip_address = url[ip_start_index:ip_index_second]
-        url_x = f"{base_url}{ip_address}"
-
-        json_url = f"{url}"
-        response = requests.get(json_url, timeout=0.5)
-        json_data = response.json()
-        if json_data['count'] == 0:
-           daiceshi.append(f'{url} 【 待 测 试 】')
-           #print(f'{url} 【 待 测 试 】')
-        try:
-            # 解析JSON文件，获取name和url字段
-            for item in json_data['data']:
-                if isinstance(item, dict):
-                   name = item.get('name')
-                   urlx = item.get('url')
-                   num = item.get('chid')
-                   srcid = item.get('srcid')
-                   #if ',' in urlx:
-                       #urlx=f"aaaaaaaa"
-                   #if 'http' in urlx or 'udp' in urlx or 'rtp' in urlx:
-                   if 'http' in urlx:
-                       urld = f"{urlx}"
-                   elif 'udp' in urlx:          #找出udp并组合
-                       urld = f"{url_x}/tsfile/live/{num}_{srcid}.m3u8?key=txiptv&playlive=1&down=1"
-                       print(urld)
-                   else:  
-                       urld = f"{url_x}{urlx}"  
-                            
-                   if name and urlx:   
-                   #hd=0
-                   #if "标清" not in name and urlx:
-                      #if "清" in name or "HD" in name or "hd" in name:
-                        #hd=1
-                      #删除特定文字
-                      name = name.replace("广东嘉佳卡通", "嘉佳卡通")
-                      name = name.replace("星河频道", "TVB星河")
-                      name = name.replace("珠江卫视", "广东珠江")
-                      name = name.replace("珠江台", "广东珠江")
-                      name = name.replace("cctv", "CCTV")
-                      name = name.replace("中央", "CCTV")
-                      name = name.replace("频道", "")
-                      name = name.replace("精品", "")
-                      name = name.replace("央视台球", "央视台球频道")
-                      name = name.replace("央视文化", "央视文化精品")
-                      name = name.replace("央视", "CCTV")
-                      name = name.replace("CCTVCCTV", "CCTV")
-                      name = name.replace("高清", "")
-                      name = name.replace("搞清", "")
-                      name = name.replace("超高", "")
-                      name = name.replace("HD", "")
-                      name = name.replace("标清", "")
-                      name = name.replace("-", "")
-                      name = name.replace(" ", "")
-                      name = name.replace("PLUS", "+")
-                      name = name.replace("＋", "+")
-                      name = name.replace("(", "")
-                      name = name.replace(")", "")
-                      name = re.sub(r"CCTV(\d+)台", r"CCTV\1", name)
-                      name = name.replace("CCTV1综合", "CCTV1")
-                      name = name.replace("CCTV2财经", "CCTV2")
-                      name = name.replace("CCTV3综艺", "CCTV3")
-                      name = name.replace("CCTV4国际", "CCTV4")
-                      name = name.replace("CCTV4中文国际", "CCTV4")
-                      name = name.replace("CCTV4欧洲", "CCTV4")
-                      name = name.replace("CCTV5体育赛事", "CCTV5+")
-                      name = name.replace("CCTV5体育", "CCTV5")
-                      name = name.replace("CCTV6电影", "CCTV6")
-                      name = name.replace("CCTV7军事", "CCTV7")
-                      name = name.replace("CCTV7军农", "CCTV7")
-                      name = name.replace("CCTV7农业", "CCTV7")
-                      name = name.replace("CCTV7国防军事", "CCTV7")
-                      name = name.replace("CCTV8电视剧", "CCTV8")
-                      name = name.replace("CCTV9记录", "CCTV9")
-                      name = name.replace("CCTV9纪录", "CCTV9")
-                      name = name.replace("CCTV10科教", "CCTV10")
-                      name = name.replace("CCTV11戏曲", "CCTV11")
-                      name = name.replace("CCTV12社会与法", "CCTV12")
-                      name = name.replace("CCTV13新闻", "CCTV13")
-                      name = name.replace("CCTV新闻", "CCTV13")                         
-                      name = name.replace("CCTV14少儿", "CCTV14")
-                      name = name.replace("CCTV15音乐", "CCTV15")
-                      name = name.replace("CCTV16奥林匹克", "CCTV16")
-                      name = name.replace("CCTV16奥运匹克", "CCTV16")
-                      name = name.replace("CCTV17农业农村", "CCTV17")
-                      name = name.replace("CCTV17农业", "CCTV17")
-                      name = name.replace("CCTV5+体育赛视", "CCTV5+")
-                      name = name.replace("CCTV5+体育赛事", "CCTV5+")
-                      name = name.replace("CCTV5+体育", "CCTV5+")
-                      name = name.replace("广东科教", "经济科教")
-                      name = name.replace("广东经济科教", "经济科教")
-                      name = name.replace("广东移动", "移动")
-                      name = name.replace("广东国际", "国际")
-                      name = name.replace("广东南方购物", "南方购物")
-                      name = name.replace("广东南方卫视", "大湾区卫视")
-                      name = name.replace("南方卫视", "大湾区卫视")
-                      name = name.replace("广东综艺", "综艺")
-                      name = name.replace("广东嘉佳", "嘉佳卡通")
-                      name = name.replace("广东公共", "广东民生")
-                      name = name.replace("广东珠江1", "广东珠江")
-                      name = name.replace("北京纪实卫视", "北京纪实")
-                      name = name.replace("上海东方", "东方")
-                      name = name.replace("上海卫视", "东方卫视")
-                      name = name.replace("综合卫视", "综合")
-                      name = name.replace("康巴卫视", "")
-                      name = name.replace("安多卫视", "")
-                      name = name.replace("文华", "文化") 
-                      name = name.replace("回放", "") 
-                      name = name.replace("编码", "") 
-                      name = name.replace("测试", "") 
-                      name = name.replace("旅游卫视", "旅游") 
-                      ##if hd == 1:
-                        ##resultshd.insert(f"{name},{urld}")
-                      ##else:
-                      results.append(f"{name},{urld}")
-                   else:
-                      continue
-                                     
-        except:
-               continue
-    except:
-           continue
-
-#results = resultshd +results
-results=list(set(results))
-daiceshi=list(set(daiceshi))
-print(daiceshi)
-channels = []
-for result in results:
-    line = result.strip()
-    if result:
-        channel_name, channel_url = result.split(',')
-        if '广东' in channel_name or 'TVB' in channel_name or '翡翠' in channel_name or '嘉佳' in channel_name or '卫视' in channel_name or 'CCTV' in channel_name:
-            channels.append((channel_name, channel_url))
-##channels = list(set(channels))
-
-results = []
-for channel in channels:
-    results.append(channel)
-
-'''
-# 线程安全的队列，用于存储下载任务
-task_queue = Queue()
-
-# 线程安全的列表，用于存储结果
-results = []
-
-error_channels = []
-
-
-# 定义工作线程函数
-def worker():
-    while True:
-        # 从队列中获取一个任务
-        channel_name, channel_url = task_queue.get()
-        try:
-            channel_url_t = channel_url.rstrip(channel_url.split('/')[-1])  # m3u8链接前缀
-            lines = requests.get(channel_url, timeout = 1).text.strip().split('\n')  # 获取m3u8文件内容
-            ts_lists = [line.split('/')[-1] for line in lines if line.startswith('#') == False]  # 获取m3u8文件下视频流后缀
-            ts_lists_0 = ts_lists[0].rstrip(ts_lists[0].split('.ts')[-1])  # m3u8链接前缀
-            ts_url = channel_url_t + ts_lists[0]  # 拼接单个视频片段下载链接
-
-            # 多获取的视频数据进行5秒钟限制
-            with eventlet.Timeout(5, False):
-                start_time = time.time()
-                content = requests.get(ts_url, timeout = 1).content
-                end_time = time.time()
-                response_time = (end_time - start_time) * 1
-
-            if content:
-                
-                with open(ts_lists_0, 'ab') as f:
-                    f.write(content)  # 写入文件
-                file_size = len(content)
-                # print(f"文件大小：{file_size} 字节")
-                download_speed = file_size / response_time / 1024
-                # print(f"下载速度：{download_speed:.3f} kB/s")
-                normalized_speed = min(max(download_speed / 1024, 0.001), 100)  # 将速率从kB/s转换为MB/s并限制在1~100之间
-                #print(f"标准化后的速率：{normalized_speed:.3f} MB/s")
-
-                # 删除下载的文件
-                os.remove(ts_lists_0)
-                result = channel_name, channel_url, f"{normalized_speed:.3f} MB/s"
-                ##result = channel_name, channel_url
-                
-                result = channel_name, channel_url
-                results.append(result)
-                numberx = (len(results) + len(error_channels)) / len(channels) * 100
-                print(f"可用频道：{len(results)} 个 , 不可用频道：{len(error_channels)} 个 , 总频道：{len(channels)} 个 ,总进度：{numberx:.2f} %。")
-        except:
-            error_channel = channel_name, channel_url
-            error_channels.append(error_channel)
-            numberx = (len(results) + len(error_channels)) / len(channels) * 100
-            print(f"可用频道：{len(results)} 个 , 不可用频道：{len(error_channels)} 个 , 总频道：{len(channels)} 个 ,总进度：{numberx:.2f} %。")
-
-        # 标记任务完成
-        task_queue.task_done()
-
-
-# 创建多个工作线程
-num_threads = 10
-for _ in range(num_threads):
-    t = threading.Thread(target=worker, daemon=True)  # 将工作线程设置为守护线程
-    t.start()
-# 添加下载任务到队列
-for channel in channels:
-    task_queue.put(channel)
-# 等待所有任务完成
-task_queue.join()
-
-'''
-
-# 排序并整理
-def channel_key(channel_name):
-    match = re.search(r'\d+', channel_name)
-    if match:
-        return int(match.group())
+def is_channel_accessible(channel_tuple):
+    """检测：可用性+响应速度+分辨率"""
+    global channel_scan_counter, channel_valid_counter
+    name, url = channel_tuple
+    response = None
+    response_time = float('inf')
+    resolution = '未知'
+    
+    # 1. 检测可用性+响应速度（HEAD优先）
+    start_time = time.time()
+    response = request_with_retry(url, method="HEAD", timeout=CHANNEL_TIMEOUT)
+    if response:
+        response_time = time.time() - start_time
     else:
-        return float('inf')  # 返回一个无穷大的数字作为关键字
+        # HEAD失败用GET，同时获取M3U8内容用于解析分辨率
+        start_time = time.time()
+        response = request_with_retry(url, method="GET", timeout=CHANNEL_TIMEOUT, stream=True)
+        if response:
+            response_time = time.time() - start_time
+            # 2. 解析分辨率（仅读取前2048字节，避免下载大文件）
+            m3u8_content = response.raw.read(2048).decode('utf-8', errors='ignore')
+            resolution = parse_resolution(m3u8_content, name)
+    
+    with lock:
+        channel_scan_counter += 1
+        if channel_scan_counter % 200 == 0:
+            print(f"【频道检测进度】已完成 {channel_scan_counter} 个，有效 {channel_valid_counter} 个")
+        if response:
+            channel_valid_counter += 1
+            priority = RESOLUTION_PRIORITY[resolution]
+            print(f"【优质频道】{name} | 分辨率：{resolution} | 响应速度：{response_time:.3f}s | {url}")
+            return (name, url, priority, response_time)
+        else:
+            ##print(f"【无效频道】{name} → {url}")
+            return None
 
-# 对频道进行排序
-#print(results)
-def shunxu(x):
-  if '翡翠' in x[0]:
-    return  1
-  if '星河' in x[0]:
-    return  2
-  if '广东卫视' in x[0]:
-    return  3
-  if '珠江' in x[0]:
-    return  4
-  if '体育' in x[0]:
-    return  5
-  if '大湾区' in x[0]:
-    return  6
-  if '新闻' in x[0]:
-    return  7  
-  if '影视' in x[0]:
-    return  8
-  if '民生' in x[0]:
-    return  9
-  if '少儿' in x[0]:
-    return  10
-  if '嘉佳' in x[0]:
-    return  11
-  return 999999
-#results.sort()
-#results = list(set(results))
-#print(type(results))#print(results[0])
-'''
-results.sort(key=lambda x: (x[0], -float(x[2].split()[0])))
-results.sort(key=lambda x: channel_key(x[0]))
-'''
-results.sort(key=shunxu)
+def extract_urls_from_source(source_content):
+    pattern = r"https?://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+"
+    raw_urls = re.findall(pattern, source_content)
+    processed_urls = []
+    for url in raw_urls:
+        if not url.startswith(('http://', 'https://')):
+            url = f"http://{url}"
+        processed_urls.append(url)
+    return processed_urls
 
-result_counter = 8  # 每个频道需要的个数
+def get_source_content(url, selenium_options):
+    try:
+        print(f"【数据源处理】Selenium 访问：{url}")
+        driver = webdriver.Chrome(options=selenium_options)
+        driver.get(url)
+        time.sleep(6)
+        page_content = driver.page_source
+        driver.quit()
+        print(f"【数据源处理】成功获取：{url}")
+        return page_content
+    except Exception as e:
+        print(f"【数据源处理】失败：{url}（错误：{str(e)[:50]}）")
+        return ""
 
-with open("test.txt", 'w', encoding='utf-8') as file:
-    channel_counters = {}
-    #results.sort()
-    file.write('广东频道,#genre#\n'+'parse=1\n'+'player=2\n'+'ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36\n')
-    for result in results:
-        channel_name, channel_url = result
-        if '广东' in channel_name or 'TVB' in channel_name or '翡翠' in channel_name or '嘉佳' in channel_name or '大湾区卫视' in channel_name or '粤语节目' in channel_name:
-            if channel_name in channel_counters:
-                if channel_counters[channel_name] >= result_counter:
+if __name__ == "__main__":
+    print("="*50)
+    print(f"【程序启动】时间：{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*50)
+
+    # 读取本地IP列表
+    try:
+        with open('ip.txt', 'r', encoding='utf-8') as file:
+            iplist = file.read().strip()
+        print(f"【本地IP读取】成功读取ip.txt（字符长度：{len(iplist)}）")
+    except Exception as e:
+        iplist = ""
+        print(f"【本地IP读取】失败：{str(e)}（忽略，继续执行）")
+
+    # 生成时间戳
+    now = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('[ %m/%d %H:%M ]')
+
+    # 数据源URL（仅前2个）
+    urls = [
+        "https://877622.xyz/ip/ips.txt",
+        "https://raw.githubusercontent.com/jaccong/iptv-api/master/output/user_result.txt"
+    ]
+
+    # Selenium配置
+    selenium_options = Options()
+    selenium_options.add_argument('--headless=new')
+    selenium_options.add_argument('--no-sandbox')
+    selenium_options.add_argument('--disable-dev-shm-usage')
+    selenium_options.add_argument(f'--user-agent={HEADERS["User-Agent"]}')
+    selenium_options.add_argument('--blink-settings=imagesEnabled=false')
+
+    # 提取待扫描URL
+    all_scan_urls = set()
+    total_raw_ip = 0
+    invalid_base_url_count = 0
+    print("\n【待扫描URL生成】开始处理数据源...")
+    for idx, source_url in enumerate(urls, 1):
+        if source_url == "fromiptxt":
+            source_content = iplist
+            print(f"【数据源{idx}/{len(urls)}】处理本地ip.txt...")
+        else:
+            source_content = get_source_content(source_url, selenium_options)
+        
+        raw_urls = extract_urls_from_source(source_content)
+        total_raw_ip += len(raw_urls)
+        print(f"【数据源{idx}/{len(urls)}】提取IP数：{len(raw_urls)}（累计：{total_raw_ip}）")
+
+        for raw_url in raw_urls:
+            try:
+                if not validate_base_url(raw_url):
+                    invalid_base_url_count += 1
                     continue
+                
+                if raw_url.startswith('https://'):
+                    ip_start_index = raw_url.find("https://") + 8
+                    base_proto = "https://"
                 else:
-                    file.write(f"{channel_name},{channel_url}\n")
-                    channel_counters[channel_name] += 1
-            else:
-                file.write(f"{channel_name},{channel_url}\n")
-                channel_counters[channel_name] = 1
-    channel_counters = {}
-    #results.sort(key=lambda x: (x[0], -float(x[2].split()[0])))
-    #results.sort(key=lambda x: channel_key(x[0]))
-    file.write('央视频道,#genre#\n')
-    for result in results:
-        channel_name, channel_url = result
-        if 'CCTV' in channel_name:
-            if channel_name in channel_counters:
-                if channel_counters[channel_name] >= result_counter:
+                    ip_start_index = raw_url.find("//") + 2
+                    base_proto = "http://"
+                
+                ip_end_index = raw_url.find(":", ip_start_index)
+                if ip_end_index == -1:
+                    invalid_base_url_count += 1
                     continue
-                else:
-                    file.write(f"{channel_name},{channel_url}\n")
-                    channel_counters[channel_name] += 1
-            else:
-                file.write(f"{channel_name},{channel_url}\n")
-                channel_counters[channel_name] = 1
-    file.write('卫视频道,#genre#\n')
-    for result in results:
-        channel_name, channel_url = result
-        if '卫视' in channel_name:
-            if channel_name in channel_counters:
-                if channel_counters[channel_name] >= result_counter:
+                
+                ip_full = raw_url[ip_start_index:ip_end_index]
+                port = raw_url[ip_end_index:]
+                ip_parts = ip_full.split(".")
+                if len(ip_parts) != 4:
+                    invalid_base_url_count += 1
                     continue
-                else:
-                    file.write(f"{channel_name},{channel_url}\n")
-                    channel_counters[channel_name] += 1
-            else:
-                file.write(f"{channel_name},{channel_url}\n")
-                channel_counters[channel_name] = 1
-    file.write(f'{now},#genre#\n')
-    file.write("自动更新,https://jaco5.top/da.mp4\n")
-#--------------------------------分界线---------------------------------------------------------
+                
+                offset = 0
+                third_part = int(ip_parts[2]) + offset
+                if 0 <= third_part <= 255:
+                    extended_ip_prefix = f"{'.'.join(ip_parts[:2])}.{third_part}"
+                    extended_url = f"{base_proto}{extended_ip_prefix}.1{port}"
+                    if validate_base_url(extended_url):
+                        all_scan_urls.add(extended_url.strip())
+                    else:
+                        invalid_base_url_count += 1
+            except Exception:
+                invalid_base_url_count += 1
+                continue
+    
+    # 计算扫描任务数
+    total_scan_tasks = 0
+    valid_base_url_count = len(all_scan_urls)
+    for idx, url in enumerate(all_scan_urls):
+        extended_urls = modify_urls(url)
+        total_scan_tasks += len(extended_urls)
+        if (idx + 1) % 100 == 0:
+            print(f"【扩展统计】已处理 {idx + 1}/{valid_base_url_count} 个URL，累计任务：{total_scan_tasks}")
+    
+    print(f"\n【待扫描URL生成】完成！")
+    print(f"- 原始IP数：{total_raw_ip} | 无效URL数：{invalid_base_url_count} | 有效基础URL数：{valid_base_url_count}")
+    print(f"- 总扫描任务数：{total_scan_tasks}")
+
+    # IP扫描
+    valid_urls = []
+    print("\n" + "="*50)
+    print(f"【IP扫描】启动（线程：{MAX_WORKERS}，超时：{TIMEOUT}s）")
+    print("="*50)
+    start_scan_time = time.time()
+
+    if total_scan_tasks > 0:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            future_to_url = {}
+            for url in all_scan_urls:
+                for modified_url in modify_urls(url):
+                    future = executor.submit(is_url_accessible, modified_url)
+                    future_to_url[future] = modified_url
+            
+            for future in concurrent.futures.as_completed(future_to_url):
+                result = future.result()
+                if result:
+                    valid_urls.append(result)
+    else:
+        print("【IP扫描】无任务，跳过")
+
+    # IP扫描统计
+    scan_time = round(time.time() - start_scan_time, 2)
+    scan_speed = scan_counter / scan_time if scan_time > 0 else 0
+    print(f"\n【IP扫描完成】耗时：{scan_time}s | 速度：{scan_speed:.0f}个/秒 | 可用IP：{len(valid_urls)}（命中率：{len(valid_urls)/scan_counter*100:.2f}%）")
+
+    # 提取频道
+    channel_data = []
+    print("\n" + "="*50)
+    if len(valid_urls) == 0:
+        print(f"【频道提取】无可用IP，跳过")
+    else:
+        print(f"【频道提取】处理 {len(valid_urls)} 个IP...")
+        print("="*50)
+        for idx, url in enumerate(valid_urls, 1):
+            if idx % 10 == 0:
+                print(f"【提取进度】{idx}/{len(valid_urls)} 个IP，已提取频道：{len(channel_data)}")
+            response = request_with_retry(url)
+            if not response:
+                continue
+            try:
+                json_data = response.json()
+                if json_data.get('count', 0) == 0:
+                    continue
+                for item in json_data.get('data', []):
+                    if not isinstance(item, dict):
+                        continue
+                    name = item.get('name', '')
+                    urlx = item.get('url', '')
+                    num = item.get('chid', '')
+                    srcid = item.get('srcid', '')
+                    if not (name and urlx):
+                        continue
+                    try:
+                        if url.startswith('https://'):
+                            ip_start_index = url.find("https://") + 8
+                        else:
+                            ip_start_index = url.find("//") + 2
+                        ip_index_second = url.find("/", ip_start_index + 1)
+                        base_ip = url[ip_start_index:ip_index_second]
+                        base_url = f"{url[:ip_start_index]}{base_ip}"
+                        
+                        if 'http' in urlx:
+                            final_url = urlx.strip()
+                        elif 'udp' in urlx:
+                            final_url = f"{base_url}/tsfile/live/{num}_{srcid}.m3u8?key=txiptv&playlive=1&down=1"
+                        else:
+                            final_url = f"{base_url}{urlx}".strip()
+                        channel_data.append((name, final_url))
+                    except Exception:
+                        continue
+            except Exception:
+                continue
+    
+    print(f"【频道提取完成】共提取：{len(channel_data)} 个频道（含重复）")
+
+    # 频道检测（可用性+分辨率+响应速度）
+    valid_channel_data = []
+    print("\n" + "="*50)
+    if len(channel_data) == 0:
+        print(f"【频道检测】无频道，跳过")
+    else:
+        print(f"【频道检测】启动（线程：{MAX_WORKERS}，超时：{CHANNEL_TIMEOUT}s）")
+        print("="*50)
+        start_channel_time = time.time()
+        
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = [executor.submit(is_channel_accessible, chan) for chan in channel_data]
+            for future in concurrent.futures.as_completed(futures):
+                result = future.result()
+                if result:
+                    valid_channel_data.append(result)
+        
+        # 排序：分辨率优先级降序 → 响应速度升序（优质频道前置）
+        valid_channel_data.sort(key=lambda x: (-x[2], x[3]))
+        
+        # 检测统计
+        channel_time = round(time.time() - start_channel_time, 2)
+        channel_speed = channel_scan_counter / channel_time if channel_time > 0 else 0
+        print(f"\n【频道检测完成】耗时：{channel_time}s | 速度：{channel_speed:.0f}个/秒 | 有效频道：{len(valid_channel_data)}（有效率：{len(valid_channel_data)/channel_scan_counter*100:.2f}%）")
+
+    # 写入文件（按优先级排序）
+    print("\n" + "="*50)
+    print(f"【文件写入】生成test.txt...")
+    print("="*50)
+    channel_counter = defaultdict(int)
+    MAX_CHANNEL_PER_NAME = 8
+    write_counts = {"广东频道": 0, "央视频道": 0, "卫视频道": 0}
+
+    with open("test.txt", 'w', encoding='utf-8') as file:
+        # 广东频道
+        file.write('广东频道,#genre#\n')
+        for name, url, _, _ in valid_channel_data:
+            if any(kw in name for kw in ['广东', 'TVB', '翡翠', '嘉佳', '大湾区']):
+                if channel_counter[name] < MAX_CHANNEL_PER_NAME:
+                    file.write(f"{name},{url}\n")
+                    channel_counter[name] += 1
+                    write_counts["广东频道"] += 1
+        
+        # 央视频道
+        file.write('央视频道,#genre#\n')
+        channel_counter.clear()
+        for name, url, _, _ in valid_channel_data:
+            if 'CCTV' in name:
+                if channel_counter[name] < MAX_CHANNEL_PER_NAME:
+                    file.write(f"{name},{url}\n")
+                    channel_counter[name] += 1
+                    write_counts["央视频道"] += 1
+        
+        # 卫视频道
+        file.write('卫视频道,#genre#\n')
+        channel_counter.clear()
+        for name, url, _, _ in valid_channel_data:
+            if '卫视' in name and 'CCTV' not in name:
+                if channel_counter[name] < MAX_CHANNEL_PER_NAME:
+                    file.write(f"{name},{url}\n")
+                    channel_counter[name] += 1
+                    write_counts["卫视频道"] += 1
+        
+        # 更新信息
+        file.write(f'{now},#genre#\n')
+        file.write("自动更新,https://jaccong0520.serv00.net/da.mp4\n")
+
+    # 最终统计
+    total_write = sum(write_counts.values())
+    print(f"【写入完成】广东：{write_counts['广东频道']} | 央视：{write_counts['央视频道']} | 卫视：{write_counts['卫视频道']} | 总计：{total_write} 个有效频道")
+    print(f"【输出文件】{os.path.abspath('test.txt')}")
+
+    print("\n" + "="*50)
+    print(f"【程序结束】时间：{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*50)
