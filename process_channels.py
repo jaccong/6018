@@ -47,7 +47,7 @@ CHANNEL_ALIAS_MAP = {
     "广东少儿": ["广少", "GD Kids", "广东少儿频道", "广东儿童频道", "GD Children's Channel", "广东少儿台"],
     "嘉佳卡通": ["嘉佳卫视", "GD Jiajia", "嘉佳卡通频道", "广东嘉佳卡通", "Jiajia Cartoon Channel", "嘉佳台"],
     # 新增：大湾区卫视
-    "大湾区卫视": ["广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
+    "大湾区卫视": ["广东公共","广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
     # 二、央视含数字主要频道（仅核心数字频道，别名覆盖“央视X套”“XX频道”“英文缩写”）
     "CCTV1": ["央视一套", "CCTV-1", "CCTV One", "央视综合", "一套","CCTV-1 综合"],
     "CCTV2": ["央视二套", "CCTV-2", "CCTV Finance", "央视财经", "二套"],
@@ -110,7 +110,7 @@ CHANNEL_ALIAS_MAP = {
     # 四、港澳台常见主要频道（仅核心主流频道，别名覆盖简称、英文、当地叫法）
     "TVB翡翠台": ["翡翠台", "无线翡翠台", "无线翡翠", "Jade TV", "TVB Jade", "翡翠卫视", "无线台"],
     "TVB明珠台": ["明珠台", "Pearl TV", "TVB Pearl", "无线明珠台", "明珠卫视", "英文台"],
-    "TVB星河台": ["星河台", "TVB Star River", "无线星河台", "星河卫视", "Star River Channel"],
+    "TVB星河台": ["TVB频道","星河台", "TVB Star River", "无线星河台", "星河卫视", "Star River Channel"],
     "TVB财经台": ["财经台", "TVB Finance", "无线财经台", "财经资讯台", "TVB Finance Channel"],
     "亚视本港台": ["本港台", "ATV Home", "亚洲本港台", "亚视Home台", "ATV 本港台"],
     "亚视国际台": ["国际台", "ATV World", "亚洲国际台", "亚视World台", "英文国际台"],
