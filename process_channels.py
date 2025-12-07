@@ -41,13 +41,13 @@ CHANNEL_ALIAS_MAP = {
     "广东体育": ["广体", "GD Sports", "广东体育频道", "广东体育台", "GD Sports Channel", "广体频道"],
     "广东新闻": ["广新", "GD News", "广东新闻频道", "广东新闻台", "GD News Channel", "广东新闻综合"],
     "广东珠江": ["珠江台", "GD Zhujiang", "广东珠江频道", "珠江卫视频道", "GD Pearl River Channel"],
-    "广东民生": ["广民", "GD Minsheng", "广东民生频道", "广东公共民生频道", "GD Minsheng Channel"],  # 修正：广东公共→广东民生
+    "广东民生": ["广民", "GD Minsheng", "广东民生频道", "广东公共频道", "广东公共", "GD Minsheng Channel"],  # 修正：广东公共→广东民生
     "广东影视": ["广影", "GD Film", "广东影视频道", "广东电影频道", "GD Movie Channel", "广影视"],
     "广东综艺": ["广综", "GD Variety", "广东综艺频道", "广东综艺娱乐频道", "GD Variety Show Channel"],
     "广东少儿": ["广少", "GD Kids", "广东少儿频道", "广东儿童频道", "GD Children's Channel", "广东少儿台"],
     "嘉佳卡通": ["嘉佳卫视", "GD Jiajia", "嘉佳卡通频道", "广东嘉佳卡通", "Jiajia Cartoon Channel", "嘉佳台"],
     # 新增：大湾区卫视
-    "大湾区卫视": ["广东湾区","广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
+    "大湾区卫视": ["南方卫视","广东南方卫视","南方频道","南方台","广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
     # 二、央视含数字主要频道（仅核心数字频道，别名覆盖“央视X套”“XX频道”“英文缩写”）
     "CCTV1": ["央视一套", "CCTV-1", "CCTV One", "央视综合", "一套","CCTV-1 综合"],
     "CCTV2": ["央视二套", "CCTV-2", "CCTV Finance", "央视财经", "二套"],
@@ -91,7 +91,7 @@ CHANNEL_ALIAS_MAP = {
     "福建东南卫视": ["东南卫视", "SETV", "福建卫视", "海鸥台", "Southeast TV", "闽卫", "东南台"],
     "海南卫视": ["琼卫", "Hainan TV", "海南卫视频道", "旅游卫视", "Hainan Tourism TV", "琼台"],
     "山西卫视": ["晋卫", "山西卫视频道", "黄河台", "Shanxi TV", "晋台", "山西台"],
-    "陕西卫视": ["陕卫", "SXTVS", "陕西卫视频道", "华夏台", "Shaanxi TV", "陕台", "陕西台"],
+    "陕西卫视": ["陕卫", "陕西卫视频道", "华夏台", "Shaanxi TV", "陕台", "陕西台"],
     "兵团卫视": ["兵卫"],
     "青海卫视": ["青卫"],
     "人间卫视": ["人卫"],
