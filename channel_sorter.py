@@ -34,7 +34,7 @@ def print_channel_list(list_name: str, channel_list: list) -> None:
         print(f"  {idx}. {channel}")
 
 
-def main(original_channels: list, custom_order: list) -> list:
+def sorter_main(original_channels: list, custom_order: list) -> list:
     """主函数：执行排序并返回结果"""
     sorted_channels = sort_channels_by_custom_order(original_channels, custom_order)
     ##print_channel_list("原始频道列表", original_channels)
