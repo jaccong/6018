@@ -47,7 +47,7 @@ CHANNEL_ALIAS_MAP = {
     "广东少儿": ["广少", "GD Kids", "广东少儿频道", "广东儿童频道", "GD Children's Channel", "广东少儿台"],
     "嘉佳卡通": ["嘉佳卫视", "GD Jiajia", "嘉佳卡通频道", "广东嘉佳卡通", "Jiajia Cartoon Channel", "嘉佳台"],
     # 新增：大湾区卫视
-    "大湾区卫视": ["广东公共","广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
+    "大湾区卫视": ["广东湾区","广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
     # 二、央视含数字主要频道（仅核心数字频道，别名覆盖“央视X套”“XX频道”“英文缩写”）
     "CCTV1": ["央视一套", "CCTV-1", "CCTV One", "央视综合", "一套","CCTV-1 综合"],
     "CCTV2": ["央视二套", "CCTV-2", "CCTV Finance", "央视财经", "二套"],
