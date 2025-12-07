@@ -7,7 +7,7 @@ jsyd=''
 from process_channels import process_channel_with_alias
 from process_channels import process_multiline_text
 from process_channels import CHANNEL_ALIAS_MAP
-from channel_sorter import main
+from channel_sorter import sorter_main
 from channel_sorter import custom_order
 
 def simplify_guangdong(text):
@@ -103,7 +103,7 @@ all_links=re.sub(r'\S*美亚电影\S*\,','美亚电影台,',all_links)
 all_links = process_multiline_text(all_links + kx, CHANNEL_ALIAS_MAP)
 
 total = re.findall(r'.*\,.*:\/\/.*',all_links)
-total = main(total, custom_order)
+total = sorter_main(total, custom_order)
 ##print(total)
 count=0
 gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视', '翡翠台','无线新闻']
