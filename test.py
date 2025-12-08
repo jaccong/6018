@@ -461,8 +461,8 @@ if __name__ == "__main__":
                     write_counts["卫视频道"] += 1
         
         # 更新信息
-        file.write(f'{now},#genre#\n')
-        file.write("自动更新,https://jaccong0520.serv00.net/da.mp4\n")
+        file.write("自动更新,#genre#\n")
+        file.write(f"{now},https://jaccong0520.serv00.net/da.mp4\n")
 
     # 最终统计
     total_write = sum(write_counts.values())
