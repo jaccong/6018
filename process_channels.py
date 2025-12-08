@@ -1,38 +1,40 @@
-def process_channel_with_alias(text, channel_alias_map):
-    """单行处理：支持别名匹配+标准名统一"""
+def process_channel_with_alias(text, channel_alias_map, core_keywords=None):
+    """优化：支持双向包含+核心关键词匹配（更宽松的模糊效果）"""
     parts = text.strip().split(',')
     if len(parts) != 2:
         return text
     input_name, url = parts[0], parts[1]
     
-    input_name_clean = input_name.lower().replace(' ', '')  # 预处理：忽略大小写和空格
+    input_name_clean = input_name.lower().replace(' ', '')
     matched_standard = None
-    max_match_len = 0  # 最长匹配优先级：避免短别名误匹配（如“翡翠”不匹配“翡翠台”）
+    max_match_len = 0
+    # 核心关键词（可自定义，如频道类型词：电影、卫视、新闻等）
+    core_keywords = core_keywords or ["电影", "卫视", "新闻"]
     
-    # 遍历所有标准频道及其别名，找最长匹配
     for standard_name, aliases in channel_alias_map.items():
-        # 合并标准名和别名，统一匹配（既支持标准名输入，也支持别名输入）
         all_match_strings = [standard_name] + aliases
         for match_str in all_match_strings:
             match_str_clean = match_str.lower().replace(' ', '')
-            if match_str_clean in input_name_clean:
-                # 优先选择匹配长度最长的（确保精准）
-                if len(match_str_clean) > max_match_len:
-                    max_match_len = len(match_str_clean)
-                    matched_standard = standard_name
+            # 逻辑1：原有双向包含匹配
+            if match_str_clean in input_name_clean or input_name_clean in match_str_clean:
+                current_len = len(match_str_clean)
+            # 逻辑2：核心关键词重叠匹配（提取双方核心词，有交集则视为匹配）
+            else:
+                # 提取输入和匹配串中的核心关键词
+                input_core = set([kw.lower() for kw in core_keywords if kw.lower() in input_name_clean])
+                match_core = set([kw.lower() for kw in core_keywords if kw.lower() in match_str_clean])
+                # 若核心词有交集，且非核心词部分有重叠（避免仅类型词匹配）
+                if input_core & match_core and any(kw in input_name_clean for kw in match_str_clean.split() if kw not in core_keywords):
+                    current_len = len(match_str_clean)
+                else:
+                    continue  # 无匹配，跳过
+            # 最长匹配优先级
+            if current_len > max_match_len:
+                max_match_len = current_len
+                matched_standard = standard_name
     
-    # 匹配成功则返回标准名，失败则返回原名称
     final_name = matched_standard if matched_standard else input_name
     return f"{final_name},{url}"
-
-# -------------------------- 新增：大段文本处理（不变） --------------------------
-def process_multiline_text(multiline_text, channel_alias_map):
-    lines = multiline_text.splitlines()
-    processed_lines = []
-    for line in lines:
-        line = line.strip()
-        processed_lines.append(process_channel_with_alias(line, channel_alias_map) if line else '')
-    return '\n'.join(processed_lines)
 
 # -------------------------- 核心配置：标准名+别名映射字典（分类整理） --------------------------
 CHANNEL_ALIAS_MAP = {
