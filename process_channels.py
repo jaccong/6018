@@ -122,13 +122,13 @@ CHANNEL_ALIAS_MAP = {
     "台湾中视": ["中视", "CTV", "中国电视公司", "中视主频", "China Television", "CTV Main"],
     "台湾华视": ["华视", "CTS", "中华电视公司", "华视主频", "China Television Service", "CTS Main"],
     "台湾民视": ["民视", "FTV", "民间全民电视公司", "民视主频", "Formosa TV", "FTV Main"],
-    "台湾中天新闻台": ["中天新闻", "CTi News", "中天台", "CTi News Channel", "中天新闻频道"],
-    "台湾TVBS": ["TVBS", "TVBS主频", "TVBS综合台", "TVBS Main Channel", "联意电视"],
+    "中天新闻台": ["中天新闻", "CTi News", "中天台", "CTi News Channel", "中天新闻频道"],
     "台湾八大综合台": ["八大综合", "GTV Variety", "八大台", "GTV综合台", "GTV Variety Channel"],
     "台湾三立新闻台": ["三立新闻", "SET News", "三立台", "SET News Channel", "三立新闻频道"],
     "台湾东森新闻台": ["东森新闻", "ETtoday News", "东森台", "ET News Channel", "东森新闻频道"],
     # 新增：港澳台指定频道
     "无线新闻台": ["TVB News", "无线新闻频道", "TVB新闻台", "香港无线新闻", "News Channel","无线新闻"],
+    "NOW新闻台": ["Now News", "Now新闻", "Now新聞"],
     "千禧经典台": ["千禧台", "Millennium Classic", "经典台", "千禧经典频道", "Millennium Channel"],
     "美亚电影台": ["美亚电影", "Meiya Movies", "美亚电影频道", "Meiya Film Channel", "MA Movies"]
 }
