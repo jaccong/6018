@@ -106,8 +106,9 @@ total = re.findall(r'.*\,.*:\/\/.*',all_links)
 total = sorter_main(total, custom_order)
 ##print(total)
 count=0
-gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视', '翡翠台','无线新闻']
+gd_keywords = ['广东卫视','广东体育','广东珠江','广东新闻','广东影视','广东民生','广东少儿', '嘉佳卡通', '大湾区卫视']
 ys_keywords =['CCTV1', 'CCTV2', 'CCTV3', 'CCTV4', 'CCTV5', 'CCTV6', 'CCTV7', 'CCTV8', 'CCTV9', 'CCTV10', 'CCTV11', 'CCTV12', 'CCTV13', 'CCTV14', 'CCTV15', 'CCTV16', 'CCTV17','CHC家庭影院','CHC动作电影','CHC影迷电影']
+gat_keywords = ['翡翠台','无线新闻','NOW新闻'，'中天新闻']
 ws_keywords = ['卫视']
 remove_keywords = ['smt','smart','Smart','cmvideo','/rtp/','/udp/']
 ws_remove_keywords = remove_keywords + ['大湾区卫视','广东卫视']
@@ -118,14 +119,13 @@ with open("108.txt", 'w', encoding='utf-8') as file:
     if any(keyword in list for keyword in gd_keywords) and all(key not in list for key in remove_keywords):
       file.write(f'{list}\n')
       count=count+1
-  '''
-  file.write('港澳频道,#genre#\nplayer=2\n')
   
+  file.write('港澳频道,#genre#\nplayer=2\n')
   for list in total:
-    if '翡翠' in list or '千禧经典' in list or '美亚电影' in list:
+    if any(keyword in list for keyword in gat_keywords) and all(key not in list for key in remove_keywords):
       file.write(f'{list}\n')
       count=count+1
-  '''
+  
   file.write('央视频道,#genre#\nplayer=2\n')
   for list in total:
     if any(keyword in list for keyword in ys_keywords) and all(key not in list for key in remove_keywords):
