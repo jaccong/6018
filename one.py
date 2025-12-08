@@ -497,7 +497,7 @@ ws_keywords = ['卫视']
 remove_keywords = ['smt','smart','Smart','cmvideo','/rtp/','/udp/']
 ws_remove_keywords = remove_keywords + ['大湾区卫视','广东卫视']
 
-with open("108.txt", 'w', encoding='utf-8') as file:
+with open("520.txt", 'w', encoding='utf-8') as file:
   file.write('广东频道,#genre#\nplayer=2\n')
   for list in total:
     if any(keyword in list for keyword in gd_keywords) and all(key not in list for key in remove_keywords):
