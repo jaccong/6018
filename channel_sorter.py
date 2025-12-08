@@ -44,8 +44,6 @@ def sorter_main(original_channels: list, custom_order: list) -> list:
 
 # 定义自定义排序规则（可自行修改）
 custom_order = [
-    "TVB翡翠台",
-    "无线新闻台",
     "广东卫视",
     "广东珠江",
     "广东体育",
@@ -55,6 +53,11 @@ custom_order = [
     "大湾区卫视",
     "广东少儿",
     "嘉佳卡通",
+    "TVB翡翠台",
+    "无线新闻台",
+    "NOW新闻台",
+    "中天新闻台",
+    "千禧新闻台",
     "CCTV1",
     "CCTV2",
     "CCTV3",
