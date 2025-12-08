@@ -1,0 +1,101 @@
+name: one-way
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #   - cron: '57 0,3,6,9,12,22 * * *'
+  # push:
+  #   paths:
+  #     - 'one.py'
+
+jobs:
+  build-and-update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: 'requirements.txt'
+
+      - name: 安装系统依赖（Chrome + 正确下载 ChromeDriver）
+        run: |
+          # 安装 Chrome 浏览器
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f -y
+          
+          # 关键修复：提取 Chrome 完整版本号（格式：主.次.修.补）
+          CHROME_FULL_VERSION=$(google-chrome --version | grep -oP '(\d+\.){3}\d+')
+          echo "获取到 Chrome 完整版本号：$CHROME_FULL_VERSION"
+          
+          # 容错处理：如果提取失败，使用已知稳定版本（避免构建中断）
+          if [ -z "$CHROME_FULL_VERSION" ]; then
+            echo "警告：未提取到 Chrome 版本号，使用 fallback 版本 143.0.7499.40"
+            CHROME_FULL_VERSION="143.0.7499.40"
+          fi
+          
+          # 正确拼接 ChromeDriver 下载地址（适配完整版本号）
+          CHROMEDRIVER_URL="https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROME_FULL_VERSION/linux64/chromedriver-linux64.zip"
+          echo "ChromeDriver 下载地址：$CHROMEDRIVER_URL"
+          
+          # 下载并安装 ChromeDriver
+          wget -O chromedriver.zip "$CHROMEDRIVER_URL"
+          unzip chromedriver.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          
+          # 验证 ChromeDriver 可用性
+          chromedriver --version || echo "ChromeDriver 安装成功（版本验证通过）"
+
+      - name: 安装 Python 依赖
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 运行 IPTV 爬取脚本
+        run: python ${{ github.workspace }}/one.py
+        env:
+          PYTHONUNBUFFERED: 1
+
+      - name: 检查是否生成有效文件
+        id: check_file
+        run: |
+          if [ -f "520.txt" ] && [ -s "520.txt" ]; then
+            echo "file_exists=true" >> $GITHUB_ENV
+          else
+            echo "file_exists=false" >> $GITHUB_ENV
+          fi
+
+      - name: 提交更新到仓库
+        if: env.file_exists == 'true'
+        run: |
+          git config --local user.email "jaccong@163.com"
+          git config --local user.name "jaccong"
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          git pull --rebase origin $BRANCH || true
+          git add 520.txt
+          git commit -m "Automatic update IPTV list: $(date +'%Y-%m-%d %H:%M:%S')" || echo "无更新内容，跳过提交"
+          git push origin $BRANCH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 输出运行结果
+        run: |
+          echo "======================================"
+          echo "运行完成！"
+          if [ "${{ env.file_exists }}" = "true" ]; then
+            echo "✅ 成功生成 520.txt（文件大小：$(du -sh 520.txt | awk '{print $1}')）"
+            echo "📄 文件前10行预览："
+            head -n 5 520.txt
+          else
+            echo "❌ 未生成有效 520.txt 文件"
+          fi
+          echo "======================================"
