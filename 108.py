@@ -138,7 +138,8 @@ with open("108.txt", 'w', encoding='utf-8') as file:
       count=count+1
  
   #file.write(getget('ty.txt'))
-  time = re.findall(r'\[.*\:.*\].*\#genre\#.*',test,flags=re.DOTALL)
+  #time = re.findall(r'\[.*\:.*\].*\#genre\#.*',test,flags=re.DOTALL)
+  time = re.findall(r'\自动更新\,\#genre\#.*',test,flags=re.DOTALL)
   file.write(f'{time[0]}\n')
       ##file.write(f'{test}\n')
       ##file.write(f'{xtext}\n')
