@@ -645,5 +645,5 @@ CCTV15高清,http://120.198.101.106:9901/tsfile/live/1041_1.m3u8?key=txiptv&play
 贵州卫视高清,http://120.198.101.106:9901/tsfile/live/1081_1.m3u8?key=txiptv&playlive=1&down=1
 黑龙江卫视高清,http://120.198.101.106:9901/tsfile/live/1075_1.m3u8?key=txiptv&playlive=1&down=1
 浙江卫视高清,http://120.238.94.82:9901/tsfile/live/1071_1.m3u8?key=txiptv&playlive=1&down=1
-[ 12/08 21:29 ],#genre#
-自动更新,https://jaccong0520.serv00.net/da.mp4
+自动更新,#genre#
+[ 12/08 21:29 ],https://jaccong0520.serv00.net/da.mp4
