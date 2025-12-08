@@ -446,20 +446,6 @@ if __name__ == "__main__":
 ##==================================================================================================================================================##
 ##==================================================================================================================================================##
 ##==================================================================================================================================================##
-def getlink(url):
-  linktext='' 
-  try:
-    linktext = requests.get(url,{'Content-Type':'application/text'},timeout=10).content.decode('utf-8')+'\n'
-    #if 'Warning' not in linktext and 'Not Found' not in linktext and 'not found' not in linktext:
-    pattern = re.compile(r'(?i)Warning|not found', re.IGNORECASE)
-    if not pattern.search(linktext):
-      print(f'<<{url}>>———————— O K ')
-    else:
-      linktext=''
-      print(f'<<{url}>>———————— F A L S E ')
-  except Exception as e:
-    print(f'error:【{e}】')
-  return linktext
 
 test = '\n'.join(f"{item[0]},{item[1]}" for item in valid_channel_data)
 test = re.sub('parse=1|player=2|ua=.*','',test)             #关键文本在这里！！！！！！！！！！！！！！
@@ -468,11 +454,11 @@ print("\n" + "="*50)
 print('【test文本整理完毕，准备再合并分类处理】')
 print("="*50)
 
-fmm = getlink('https://fanmingming.com/txt?url=https://kakaxi-1.asia/ipv6.m3u')
-rihou = getlink('http://rihou.cc:555/gggg.nzk')
-shulao = getlink('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
-bcitv = getlink('https://877622.xyz/m2t.php?url=https://188766.xyz/itv')
-aptv = getlink('https://fanmingming.com/txt?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u')
+fmm = get_source_content('https://fanmingming.com/txt?url=https://kakaxi-1.asia/ipv6.m3u', selenium_options)
+rihou = get_source_content('http://rihou.cc:555/gggg.nzk', selenium_options)
+shulao = get_source_content('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1', selenium_options)
+bcitv = get_source_content('https://877622.xyz/m2t.php?url=https://188766.xyz/itv', selenium_options)
+aptv = get_source_content('https://fanmingming.com/txt?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
 kx = aptv + bcitv + rihou + shulao
 
 all_links=fmm+test
@@ -531,11 +517,6 @@ with open("520.txt", 'w', encoding='utf-8') as file:
       file.write(f'{list}\n')
       count=count+1
 
-  #time = re.findall(r'\[.*\:.*\].*\#genre\#.*',test,flags=re.DOTALL)
-  time = re.findall(r'\自动更新\,\#genre\#.*',test,flags=re.DOTALL)
-  file.write(f'{time[0]}\n')
-      ##file.write(f'{test}\n')
-      ##file.write(f'{xtext}\n')
-      ##file.write(f'{taop}\n')
-      ##file.write(f'{newnine}\n')
-content = '已更新频道'+str(count)+'个'
+  file.write('自动更新,#genre#\n')
+  file.write(f'{now},https://jaccong0520.serv00.net/da.mp4')
+
