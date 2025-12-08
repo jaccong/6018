@@ -458,8 +458,8 @@ fmm = get_source_content('https://fanmingming.com/txt?url=https://kakaxi-1.asia/
 rihou = get_source_content('http://rihou.cc:555/gggg.nzk', selenium_options)
 shulao = get_source_content('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1', selenium_options)
 bcitv = get_source_content('https://877622.xyz/m2t.php?url=https://188766.xyz/itv', selenium_options)
-#aptv = get_source_content('https://fanmingming.com/txt?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
-kx = bcitv + rihou + shulao
+aptv = get_source_content('https://fanmingming.com/txt?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
+kx =aptv+ bcitv + rihou + shulao
 
 all_links=fmm+test
 all_links=re.sub(r'[a-zA-Z]+\,',',',all_links)
