@@ -20,6 +20,8 @@ from process_channels import process_multiline_text
 from process_channels import CHANNEL_ALIAS_MAP
 from channel_sorter import sorter_main
 from channel_sorter import custom_order
+
+
 ##===========================================================================================##
 ##===========================================================================================##
 # 核心配置
@@ -110,7 +112,7 @@ def is_url_accessible(url):
     response = request_with_retry(url)
     with lock:
         scan_counter += 1
-        if scan_counter % 500 == 0:
+        if scan_counter % 5000 == 0:
             print(f"【IP扫描进度】已完成 {scan_counter} 个URL，当前可用 {valid_counter} 个")
         if response:
             valid_counter += 1
@@ -203,7 +205,7 @@ def is_channel_accessible(channel_tuple):
         if response:
             channel_valid_counter += 1
             priority = RESOLUTION_PRIORITY[resolution]
-            print(f"【优质频道】{name} | 分辨率：{resolution} | 响应速度：{response_time:.3f}s | {url}")
+            #print(f"【优质频道】{name} | 分辨率：{resolution} | 响应速度：{response_time:.3f}s | {url}")
             return (name, url, priority, response_time)
         else:
             ##print(f"【无效频道】{name} → {url}")
@@ -408,6 +410,10 @@ if __name__ == "__main__":
     
     print(f"【频道提取完成】共提取：{len(channel_data)} 个频道（含重复）")
 
+    #初步筛选频道
+    #chubu_keywords = ['广东', '翡翠', '无线', '卫视']
+    #channel_data = [item for item in channel_data if any(kw in item[0] for kw in chubu_keywords)]
+    
     # 频道检测（可用性+分辨率+响应速度）
     valid_channel_data = []
     print("\n" + "="*50)
@@ -455,8 +461,12 @@ def getlink(url):
     print(f'error:【{e}】')
   return linktext
 
-test = '\n'.join(valid_channel_data)
+test = '\n'.join(f"{item[0]},{item[1]}" for item in valid_channel_data)
 test = re.sub('parse=1|player=2|ua=.*','',test)             #关键文本在这里！！！！！！！！！！！！！！
+
+print("\n" + "="*50)
+print('【test文本整理完毕，准备再合并分类处理】')
+print("="*50)
 
 fmm = getlink('https://fanmingming.com/txt?url=https://kakaxi-1.asia/ipv6.m3u')
 rihou = getlink('http://rihou.cc:555/gggg.nzk')
