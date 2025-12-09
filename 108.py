@@ -46,7 +46,7 @@ def getlink(url):
     "Accept-Encoding": "br;q=1.0, gzip;q=0.9, deflate;q=0.8",
     "Cache-Control": "no-cache, no-store"
     }
-    linktext = requests.get(url, headers=headers, timeout=10).content.decode('utf-8') + '\n'
+    linktext = requests.get(url, headers=headers, timeout=10).content  + '\n'
     #if 'Warning' not in linktext and 'Not Found' not in linktext and 'not found' not in linktext:
     pattern = re.compile(r'(?i)Warning|not found', re.IGNORECASE)
     if not pattern.search(linktext):
