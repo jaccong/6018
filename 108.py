@@ -38,15 +38,13 @@ def getlink(url):
  
   try:
     headers = {
-    "Pragma": "no-cache",
-    "Connection": "keep-alive",
     "Accept": "*/*",
     "User-Agent": "AptvPlayer/1.3.16",
     "Accept-Language": "zh-Hans-CN;q=1.0, zh-Hant-HK;q=0.9, en-CN;q=0.8",
     "Accept-Encoding": "br;q=1.0, gzip;q=0.9, deflate;q=0.8",
     "Cache-Control": "no-cache, no-store"
     }
-    linktext = requests.get(url, headers=headers, timeout=10).content  + '\n'
+    linktext = requests.get(url, headers=headers, timeout=10).text  + '\n'
     #if 'Warning' not in linktext and 'Not Found' not in linktext and 'not found' not in linktext:
     pattern = re.compile(r'(?i)Warning|not found', re.IGNORECASE)
     if not pattern.search(linktext):
