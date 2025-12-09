@@ -66,6 +66,7 @@ kkxv4 = getlink('https://raw.githubusercontent.com/kakaxi-1/IPTV/refs/heads/main
 rihou = getlink('http://rihou.cc:555/gggg.nzk')
 shulao = getlink('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
 bcitv = getlink('https://877622.xyz/m2t.php?url=https://188766.xyz/itv')
+print(bcitv)
 aptv = getlink('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u')
 
 kx = aptv +kkxv4 + bcitv + rihou + shulao
