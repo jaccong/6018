@@ -95,6 +95,8 @@ jobs:
             echo "✅ 成功生成 520.txt（文件大小：$(du -sh 520.txt | awk '{print $1}')）"
             echo "📄 文件前10行预览："
             head -n 5 520.txt
+            echo "======================================"
+            wget -q -O - "http://jaccong0520.serv00.net/live-data/list.php"
           else
             echo "❌ 未生成有效 520.txt 文件"
           fi
