@@ -9,6 +9,9 @@ from process_channels import process_multiline_text
 from process_channels import CHANNEL_ALIAS_MAP
 from channel_sorter import sorter_main
 from channel_sorter import custom_order
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
 
 def simplify_guangdong(text):
     # 正则匹配：广东开头的任意字符，强制截取前4个字（广东+2个字符）
@@ -55,6 +58,31 @@ def getlink(url):
   except Exception as e:
     print(f'error:【{e}】')
   return linktext
+def get_source_content(url, selenium_options):
+    try:
+        print(f"【数据源处理】Selenium 访问：{url}")
+        driver = webdriver.Chrome(options=selenium_options)
+        driver.get(url)
+        time.sleep(6)
+        page_content = driver.page_source
+        driver.quit()
+        print(f"【数据源处理】成功获取：{url}")
+        return page_content
+    except Exception as e:
+        print(f"【数据源处理】失败：{url}（错误：{str(e)[:50]}）")
+        return ""
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "*/*",
+    "Connection": "keep-alive"
+}
+# Selenium配置
+selenium_options = Options()
+selenium_options.add_argument('--headless=new')
+selenium_options.add_argument('--no-sandbox')
+selenium_options.add_argument('--disable-dev-shm-usage')
+selenium_options.add_argument(f'--user-agent={HEADERS["User-Agent"]}')
+selenium_options.add_argument('--blink-settings=imagesEnabled=false')
 
 with open('test.txt', 'r', encoding='utf-8') as file:
   test = file.read()
@@ -65,16 +93,17 @@ with open('test.txt', 'r', encoding='utf-8') as file:
   test = re.sub(r'纬来体育.*','',test)
   test = re.sub(r'TVBPlus.*','',test)
 
+
 ##iptv = getlink('')
 ##itv = getlink('https://kakaxi-1.asia/ipv4.txt')
 ##gxgx = getget('gxgx.txt')
-fmm = getlink('https://877622.xyz/m2t.php?url=https://kakaxi-1.asia/ipv6.m3u')
-kkxv4 = getlink('https://raw.githubusercontent.com/kakaxi-1/IPTV/refs/heads/main/ipv4.txt')
-rihou = getlink('http://rihou.cc:555/gggg.nzk')
-shulao = getlink('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
-bcitv = getlink('https://877622.xyz/m2t.php?url=https://188766.xyz/itv')
+fmm = get_source_content('https://877622.xyz/m2t.php?url=https://kakaxi-1.asia/ipv6.m3u', selenium_options)
+kkxv4 = get_source_content('https://raw.githubusercontent.com/kakaxi-1/IPTV/refs/heads/main/ipv4.txt', selenium_options)
+rihou = get_source_content('http://rihou.cc:555/gggg.nzk', selenium_options)
+shulao = get_source_content('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1', selenium_options)
+bcitv = get_source_content('https://877622.xyz/m2t.php?url=https://188766.xyz/itv', selenium_options)
 print(bcitv)
-aptv = getlink('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u')
+aptv = get_source_content('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
 
 kx = aptv +kkxv4 + bcitv + rihou + shulao
 ##kx1 = process_multiline_text(kx, CHANNEL_ALIAS_MAP)
