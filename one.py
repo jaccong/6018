@@ -502,7 +502,7 @@ with open("520.txt", 'w', encoding='utf-8') as file:
   
   file.write('港澳频道,#genre#\nplayer=2\n')
   for list in total:
-    if any(keyword in list for keyword in gat_keywords) and all(key not in list for key in remove_keywords):
+    if any(keyword in list for keyword in gat_keywords):
       file.write(f'{list}\n')
       count=count+1
   
