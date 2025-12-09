@@ -1,0 +1,142 @@
+name: iptv-auto-update
+
+# 触发条件：手动触发 + 单个 cron 定时（可根据需求修改时间）
+on:
+  workflow_dispatch:
+  #schedule:
+  #  - cron: '57 0,3,6,9,12,22 * * *'  # 保留一个定时，按需调整
+
+# 授予工作流读写仓库权限（必须）
+permissions:
+  contents: write
+
+jobs:
+  iptv-update-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          cache-dependency-path: 'requirements.txt'
+
+      - name: 安装系统依赖（Chrome + ChromeDriver）
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f -y
+          
+          # 提取 Chrome 完整版本号
+          CHROME_FULL_VERSION=$(google-chrome --version | grep -oP '(\d+\.){3}\d+')
+          echo "获取到 Chrome 版本号：$CHROME_FULL_VERSION"
+          
+          # 版本容错
+          if [ -z "$CHROME_FULL_VERSION" ]; then
+            echo "警告：版本提取失败，使用 fallback 版本 143.0.7499.40"
+            CHROME_FULL_VERSION="143.0.7499.40"
+          fi
+          
+          # 下载匹配的 ChromeDriver
+          CHROMEDRIVER_URL="https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROME_FULL_VERSION/linux64/chromedriver-linux64.zip"
+          wget -O chromedriver.zip "$CHROMEDRIVER_URL"
+          unzip chromedriver.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          
+          # 验证 ChromeDriver
+          chromedriver --version
+
+      - name: 安装 Python 依赖
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt requests  # 包含 108.py 可能需要的 requests
+
+      # -------------------------- 第一步：执行 test.py 生成 test.txt --------------------------
+      - name: 运行 test.py 爬取脚本
+        run: python ${{ github.workspace }}/test.py
+        env:
+          PYTHONUNBUFFERED: 1  # 实时输出日志，便于调试
+
+      - name: 检查 test.txt 有效性（108.py 依赖此文件）
+        id: check_test
+        run: |
+          if [ -f "test.txt" ] && [ -s "test.txt" ]; then
+            echo "test_exists=true" >> $GITHUB_ENV
+            echo "test_size=$(du -sh test.txt | awk '{print $1}')" >> $GITHUB_ENV
+          else
+            echo "test_exists=false" >> $GITHUB_ENV
+          fi
+
+      - name: 提交 test.txt 到远程仓库
+        if: env.test_exists == 'true'
+        run: |
+          git config --local user.email "jaccong@163.com"
+          git config --local user.name "jaccong"
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          git pull --rebase origin $BRANCH || true  # 拉取远程更新，避免冲突
+          git add test.txt
+          git commit -m "Auto update test.txt: $(date +'%Y-%m-%d %H:%M:%S')" || echo "test.txt 无更新，跳过提交"
+          git push origin $BRANCH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # -------------------------- 第二步：执行 108.py（读取本地最新 test.txt） --------------------------
+      - name: 运行 108.py 脚本（依赖 test.txt）
+        if: env.test_exists == 'true'  # 只有 test.txt 有效才执行，避免报错
+        run: python ${{ github.workspace }}/108.py
+        env:
+          PYTHONUNBUFFERED: 1
+
+      - name: 检查 108.txt 有效性
+        id: check_108
+        run: |
+          if [ -f "108.txt" ] && [ -s "108.txt" ]; then
+            echo "txt108_exists=true" >> $GITHUB_ENV  # 修正：环境变量名不能以数字开头
+            echo "txt108_size=$(du -sh 108.txt | awk '{print $1}')" >> $GITHUB_ENV
+          else
+            echo "txt108_exists=false" >> $GITHUB_ENV
+          fi
+
+      - name: 提交 108.txt 到远程仓库
+        if: env.txt108_exists == 'true'
+        run: |
+          git config --local user.email "jaccong@163.com"
+          git config --local user.name "jaccong"
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          git pull --rebase origin $BRANCH || true  # 再次拉取，避免两次提交冲突
+          git add 108.txt
+          git commit -m "Auto update 108.txt: $(date +'%Y-%m-%d %H:%M:%S')" || echo "108.txt 无更新，跳过提交"
+          git push origin $BRANCH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # -------------------------- 最终执行报告 --------------------------
+      - name: 输出完整执行报告
+        run: |
+          echo "======================================"
+          echo "          IPTV 自动更新报告"
+          echo "======================================"
+          echo "执行时间：$(date +'%Y-%m-%d %H:%M:%S')"
+          echo "--------------------------------------"
+          echo "test.txt 状态: ${{ env.test_exists == 'true' && '✅ 成功' || '❌ 失败' }}"
+          if [ "${{ env.test_exists }}" = "true" ]; then
+            echo "test.txt 大小: ${{ env.test_size }}"
+            echo "test.txt 前5行预览:"
+            head -n 5 test.txt
+          fi
+          echo "--------------------------------------"
+          echo "108.txt 状态: ${{ env.txt108_exists == 'true' && '✅ 成功' || '❌ 失败' }}"
+          if [ "${{ env.txt108_exists }}" = "true" ]; then
+            echo "108.txt 大小: ${{ env.txt108_size }}"
+            echo "108.txt 前5行预览:"
+            head -n 5 108.txt
+            echo "======================================"
+            wget -q -O - "http://jaccong0520.serv00.net/live-data/list.php"
+          fi
+          echo "======================================"
