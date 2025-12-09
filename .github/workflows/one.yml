@@ -3,7 +3,7 @@ name: one-way
 on:
   workflow_dispatch:
   #schedule:
-  #   - cron: '57 0,3,6,9,12,22 * * *'
+  #   - cron: '0 */2 * * *'
   # push:
   #   paths:
   #     - 'one.py'
