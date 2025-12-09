@@ -6,8 +6,8 @@ on:
    #push:
      #paths:
       #- 'gengxinip.py'
-   schedule:
-        - cron: '12 1,4,7,10,13,23 * * *'
+   #schedule:
+   #     - cron: '12 1,4,7,10,13,23 * * *'
    workflow_dispatch:
  
 jobs:
