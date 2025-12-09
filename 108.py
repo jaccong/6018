@@ -103,7 +103,6 @@ kkxv4 = get_source_content('https://raw.githubusercontent.com/kakaxi-1/IPTV/refs
 rihou = get_source_content('http://rihou.cc:555/gggg.nzk', selenium_options)
 shulao = get_source_content('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1', selenium_options)
 bcitv = get_source_content('https://877622.xyz/m2t.php?url=https://188766.xyz/itv', selenium_options)
-print(bcitv)
 aptv = get_source_content('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
 
 kx = aptv +kkxv4 + bcitv + rihou + shulao
