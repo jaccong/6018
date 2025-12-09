@@ -51,7 +51,10 @@ jobs:
           
           # 验证 ChromeDriver 可用性
           chromedriver --version || echo "ChromeDriver 安装成功（版本验证通过）"
-          
+      - name: 安装 Python 依赖
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt          
       - name: Install dependencies
         run: pip install requests
         
