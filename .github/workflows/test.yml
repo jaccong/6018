@@ -2,8 +2,8 @@ name: auto
 
 on:
   workflow_dispatch:
-  schedule:
-     - cron: '57 0,3,6,9,12,22 * * *'
+  #schedule:
+  #   - cron: '57 0,3,6,9,12,22 * * *'
   # push:
   #   paths:
   #     - 'test.py'
