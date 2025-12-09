@@ -3,8 +3,8 @@ name: iptv-auto-update
 # 触发条件：手动触发 + 单个 cron 定时（可根据需求修改时间）
 on:
   workflow_dispatch:
-  #schedule:
-  #  - cron: '57 0,3,6,9,12,22 * * *'  # 保留一个定时，按需调整
+  schedule:
+    - cron: '0 0,2,4,8,10,12,14,22 * * *'  # 保留一个定时，按需调整
 
 # 授予工作流读写仓库权限（必须）
 permissions:
