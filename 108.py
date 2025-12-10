@@ -67,7 +67,8 @@ def get_source_content(url, selenium_options):
         time.sleep(6)
         page_content = driver.page_source
         driver.quit()
-        print(f"【数据源处理】成功获取：{url}")
+        page_content_lines = page_content.splitlines()
+        print(f"【数据源处理】成功获取：{url},整体文本有{len(page_content_lines)}行")
         return page_content
     except Exception as e:
         print(f"【数据源处理】失败：{url}（错误：{str(e)[:50]}）")
@@ -103,6 +104,7 @@ kkxv4 = get_source_content('https://raw.githubusercontent.com/kakaxi-1/IPTV/refs
 rihou = get_source_content('http://rihou.cc:555/gggg.nzk', selenium_options)
 shulao = get_source_content('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1', selenium_options)
 bcitv = get_source_content('https://877622.xyz/m2t.php?url=https://188766.xyz/itv', selenium_options)
+print(bcitv)
 aptv = get_source_content('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
 
 kx = aptv +kkxv4 + bcitv + rihou + shulao
@@ -126,6 +128,7 @@ all_links=re.sub(r'（.*）','',all_links)
 all_links=re.sub(r'\(.*\)','',all_links)
 all_links=re.sub(r'([\u4e00-\u9fff]+)\d+',r'\1',all_links)
 all_links=re.sub(r'粤语节目\d*','',all_links)
+all_links=re.sub(r'&amp;','',all_links)
 
 all_links = process_multiline_text(all_links + kx, CHANNEL_ALIAS_MAP)
 
