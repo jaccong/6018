@@ -53,8 +53,9 @@ def get_source_content(url, selenium_options):
         print(f"【数据源处理】失败：{url}（错误：{str(e)[:50]}）")
         return ""
 HEADERS = {
-    "User-Agent": "AptvPlayer/1.3.16",
-    "Accept": "text/plain, */*; q=0.8",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/16.1 Safari/604.1",
+    "Upgrade-Insecure-Requests":"1",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Connection": "keep-alive",
     "Content-Type":"text/plain;charset=utf-8"
 }
