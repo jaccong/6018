@@ -55,9 +55,9 @@ def get_source_content(url, selenium_options):
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/16.1 Safari/604.1",
     "Upgrade-Insecure-Requests":"1",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Connection": "keep-alive",
-    "Content-Type":"text/plain;charset=utf-8"
+    "Accept": "test/plain,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Connection": "keep-alive"
+    
 }
 # Selenium配置
 selenium_options = Options()
@@ -66,7 +66,10 @@ selenium_options.add_argument('--no-sandbox')
 selenium_options.add_argument('--disable-dev-shm-usage')
 selenium_options.add_argument(f'--user-agent={HEADERS["User-Agent"]}')
 selenium_options.add_argument('--blink-settings=imagesEnabled=false')
-
+# 新增：隐藏Selenium自动化特征（核心！防止服务器识别） 
+selenium_options.add_argument('--disable-blink-features=AutomationControlled') 
+selenium_options.add_experimental_option('excludeSwitches', ['enable-automation']) 
+selenium_options.add_experimental_option('useAutomationExtension', False)
 with open('test.txt', 'r', encoding='utf-8') as file:
   test = file.read()
   ##test = re.sub(r'\[.*\]Updated\.\,\#genre\#.*','',test,flags=re.DOTALL)
