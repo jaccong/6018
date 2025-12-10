@@ -4,7 +4,7 @@ name: iptv-auto-update
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0,2,4,8,10,12,14,22 * * *'  # 保留一个定时，按需调整
+    - cron: '56 1,3,7,9,11,13,21,23 * * *'  # 保留一个定时，按需调整
 
 # 授予工作流读写仓库权限（必须）
 permissions:
