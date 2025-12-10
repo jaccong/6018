@@ -37,28 +37,7 @@ def getget(filename):
   with open(filename, 'r', encoding='utf-8') as file:
     text = file.read()
   return text
-def getlink(url):
-  linktext=''
- 
-  try:
-    headers = {
-    "Accept": "*/*",
-    "User-Agent": "AptvPlayer/1.3.16",
-    "Accept-Language": "zh-Hans-CN;q=1.0, zh-Hant-HK;q=0.9, en-CN;q=0.8",
-    "Accept-Encoding": "br;q=1.0, gzip;q=0.9, deflate;q=0.8",
-    "Cache-Control": "no-cache, no-store"
-    }
-    linktext = requests.get(url, headers=headers, timeout=10).text  + '\n'
-    #if 'Warning' not in linktext and 'Not Found' not in linktext and 'not found' not in linktext:
-    pattern = re.compile(r'(?i)Warning|not found', re.IGNORECASE)
-    if not pattern.search(linktext):
-      print(f'<<{url}>>———————— O K ')
-    else:
-      linktext=''
-      print(f'<<{url}>>———————— F A L S E ')
-  except Exception as e:
-    print(f'error:【{e}】')
-  return linktext
+
 def get_source_content(url, selenium_options):
     try:
         print(f"【数据源处理】Selenium 访问：{url}")
@@ -76,7 +55,8 @@ def get_source_content(url, selenium_options):
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "*/*",
-    "Connection": "keep-alive"
+    "Connection": "keep-alive",
+    "Content-Type":"text/plain;charset=utf-8"
 }
 # Selenium配置
 selenium_options = Options()
@@ -108,7 +88,7 @@ print(bcitv)
 aptv = get_source_content('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
 
 kx = aptv +kkxv4 + bcitv + rihou + shulao
-kx=re.sub(r'&amp;','',kx)
+kx=re.sub(r'&amp;','&',kx)
 ##kx1 = process_multiline_text(kx, CHANNEL_ALIAS_MAP)
 
 ##kx1 = simplify_guangdong(simplify_cctv(kx))
