@@ -108,6 +108,7 @@ print(bcitv)
 aptv = get_source_content('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
 
 kx = aptv +kkxv4 + bcitv + rihou + shulao
+kx=re.sub(r'&amp;','',kx)
 ##kx1 = process_multiline_text(kx, CHANNEL_ALIAS_MAP)
 
 ##kx1 = simplify_guangdong(simplify_cctv(kx))
@@ -128,7 +129,7 @@ all_links=re.sub(r'（.*）','',all_links)
 all_links=re.sub(r'\(.*\)','',all_links)
 all_links=re.sub(r'([\u4e00-\u9fff]+)\d+',r'\1',all_links)
 all_links=re.sub(r'粤语节目\d*','',all_links)
-all_links=re.sub(r'&amp;','',all_links)
+
 
 all_links = process_multiline_text(all_links + kx, CHANNEL_ALIAS_MAP)
 
