@@ -129,7 +129,7 @@ CHANNEL_ALIAS_MAP = {
     # 新增：港澳台指定频道
     "无线新闻台": ["TVB News", "无线新闻频道", "TVB新闻台", "香港无线新闻", "News Channel","无线新闻"],
     "NOW新闻台": ["Now News", "Now新闻", "Now新聞"],
-    "千禧经典台": [ "Millennium Classic", "经典台", "千禧经典", "Millennium Channel"],
+    "千禧经典台": [ "Millennium Classic", "TVB经典台", "千禧经典", "无线千禧","Millennium Channel"],
     "美亚电影台": ["美亚电影", "Meiya Movies", "美亚电影频道", "Meiya Film Channel", "MA Movies"]
 }
 # -------------------------- 测试：别名场景处理效果 --------------------------
