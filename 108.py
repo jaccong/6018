@@ -59,8 +59,16 @@ def fetch_txt(url):
         # 直接保存纯TXT（无HTML标签）
         line_count = len(response.text.splitlines())  # 兼容所有换行符（\n/\r/\r\n）
         print(f"✅ 成功获取{url}内容，📊 文本总行数：{line_count}")
-        
         return response.text+'\n'
+    except requests.exceptions.Timeout:
+        print(f"❌ 错误：请求超时（超过15秒）")
+        return None
+    except requests.exceptions.ConnectionError:
+        print(f"❌ 错误：网络连接失败")
+        return None
+    except Exception as e:
+        print(f"❌ 错误：{str(e)}")
+        return None
 with open('test.txt', 'r', encoding='utf-8') as file:
   test = file.read()
   ##test = re.sub(r'\[.*\]Updated\.\,\#genre\#.*','',test,flags=re.DOTALL)
