@@ -38,38 +38,29 @@ def getget(filename):
     text = file.read()
   return text
 
-def get_source_content(url, selenium_options):
-    try:
-        print(f"【数据源处理】Selenium 访问：{url}")
-        driver = webdriver.Chrome(options=selenium_options)
-        driver.get(url)
-        time.sleep(6)
-        page_content = driver.page_source +"\n"
-        driver.quit()
-        page_content_lines = page_content.splitlines()
-        print(f"【数据源处理】成功获取：{url},整体文本有{len(page_content_lines)}行")
-        return page_content
-    except Exception as e:
-        print(f"【数据源处理】失败：{url}（错误：{str(e)[:50]}）")
-        return ""
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/16.1 Safari/604.1",
-    "Upgrade-Insecure-Requests":"1",
-    "Accept": "test/plain,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Connection": "keep-alive"
+
+def fetch_txt(url):
+    """
+    简单调用：获取目标URL的纯TXT内容并保存
+    :param url: 目标TXT地址（必填）
+    :param save_path: 保存路径（默认epg.txt）
+    :return: 成功返回True，失败返回False
+    """
+    # 优化后的请求头（强制要TXT）
+    HEADERS = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/604.3.5 (KHTML, like Gecko) Version/16.1 Safari/604.1",
+        "Accept": "text/plain,*/*",  # 只请求TXT，拒绝HTML
+        "Connection": "keep-alive"
+    }
     
-}
-# Selenium配置
-selenium_options = Options()
-selenium_options.add_argument('--headless=new')
-selenium_options.add_argument('--no-sandbox')
-selenium_options.add_argument('--disable-dev-shm-usage')
-selenium_options.add_argument(f'--user-agent={HEADERS["User-Agent"]}')
-selenium_options.add_argument('--blink-settings=imagesEnabled=false')
-# 新增：隐藏Selenium自动化特征（核心！防止服务器识别） 
-selenium_options.add_argument('--disable-blink-features=AutomationControlled') 
-selenium_options.add_experimental_option('excludeSwitches', ['enable-automation']) 
-selenium_options.add_experimental_option('useAutomationExtension', False)
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=15)
+        response.encoding = "utf-8"  # 避免中文乱码
+        # 直接保存纯TXT（无HTML标签）
+        line_count = len(response.text.splitlines())  # 兼容所有换行符（\n/\r/\r\n）
+        print(f"✅ 成功获取{url}内容，📊 文本总行数：{line_count}")
+        
+        return response.text+'\n'
 with open('test.txt', 'r', encoding='utf-8') as file:
   test = file.read()
   ##test = re.sub(r'\[.*\]Updated\.\,\#genre\#.*','',test,flags=re.DOTALL)
@@ -83,11 +74,11 @@ with open('test.txt', 'r', encoding='utf-8') as file:
 ##iptv = getlink('')
 ##itv = getlink('https://kakaxi-1.asia/ipv4.txt')
 ##gxgx = getget('gxgx.txt')
-fmm = get_source_content('https://877622.xyz/m2t.php?url=https://kakaxi-1.asia/ipv6.m3u', selenium_options)
-kkxv4 = get_source_content('https://raw.githubusercontent.com/kakaxi-1/IPTV/refs/heads/main/ipv4.txt', selenium_options)
-rihou = get_source_content('http://rihou.cc:555/gggg.nzk', selenium_options)
-shulao = get_source_content('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1', selenium_options)
-bcitv = get_source_content('https://877622.xyz/m2t.php?url=https://188766.xyz/itv', selenium_options)
+fmm = fetch_txt('https://877622.xyz/m2t.php?url=https://kakaxi-1.asia/ipv6.m3u')
+kkxv4 = fetch_txt('https://raw.githubusercontent.com/kakaxi-1/IPTV/refs/heads/main/ipv4.txt')
+rihou = fetch_txt('http://rihou.cc:555/gggg.nzk')
+shulao = fetch_txt('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
+bcitv = fetch_txt('https://877622.xyz/m2t.php?url=https://188766.xyz/itv')
 print(bcitv)
 aptv = get_source_content('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u', selenium_options)
 
