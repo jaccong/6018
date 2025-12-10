@@ -10,8 +10,7 @@ from process_channels import process_multiline_text
 from process_channels import CHANNEL_ALIAS_MAP
 from channel_sorter import sorter_main
 from channel_sorter import custom_order
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+
 
 
 def simplify_guangdong(text):
