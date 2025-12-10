@@ -44,7 +44,7 @@ def get_source_content(url, selenium_options):
         driver = webdriver.Chrome(options=selenium_options)
         driver.get(url)
         time.sleep(6)
-        page_content = driver.page_source
+        page_content = driver.page_source +"\n"
         driver.quit()
         page_content_lines = page_content.splitlines()
         print(f"【数据源处理】成功获取：{url},整体文本有{len(page_content_lines)}行")
