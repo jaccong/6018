@@ -87,6 +87,7 @@ rihou = fetch_txt('http://rihou.cc:555/gggg.nzk')
 shulao = fetch_txt('https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')
 bcitv = fetch_txt('https://877622.xyz/m2t.php?url=https://188766.xyz/itv')
 aptv = fetch_txt('https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u')
+cat = fetch_txt('https://877622.xyz/m2t.php?url=https://iptv.catvod.com/tv.m3u')
 
 kx = aptv +kkxv4 + bcitv + rihou + shulao
 kx=re.sub(r'&amp;','&',kx)
@@ -95,7 +96,7 @@ kx=re.sub(r'&amp;','&',kx)
 ##kx1 = simplify_guangdong(simplify_cctv(kx))
 ##kxtt = re.findall(r'.*\,.*:\/\/.*',kx1)
 
-all_links=fmm+test
+all_links=fmm + cat + test
 all_links=re.sub(r'[a-zA-Z]+\,',',',all_links)
 all_links=re.sub('超清','',all_links)
 all_links=re.sub('home','',all_links)
