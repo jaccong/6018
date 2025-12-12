@@ -73,6 +73,9 @@ CHANNEL_ALIAS_MAP = {
     "CCTV15": ["央视十五套", "音乐频道", "CCTV-15", "CCTV Music", "央视音乐", "十五套", "音乐台"],
     "CCTV16": ["央视十六套", "奥林匹克频道", "CCTV-16", "CCTV Olympic", "央视奥运频道", "十六套"],
     "CCTV17": ["央视十七套", "农业农村频道", "CCTV-17", "CCTV Agriculture", "央视农业农村", "十七套"],
+    "CHC高清电影": ["CHC HD", "华诚高清电影", "CHC高清台", "高清电影台", "CHC High Definition"],
+    "CHC动作电影": ["CHC Action", "动作电影台", "CHC动作台", "华诚动作电影", "CHC Action Movies"],
+    "CHC家庭影院": ["CHC Family", "家庭影院台", "CHC家庭影院", "华诚家庭影院", "CHC Home Theater"],
     # 三、常见主要卫视频道（仅核心主流卫视，别名覆盖简称、昵称、英文、缩写）
     "湖南卫视": ["芒果台", "HNTV", "湖南卫视频道", "湘卫", "Hunan TV", "芒果卫视", "湖南台"],
     "浙江卫视": ["浙卫", "ZJTV", "浙江卫视频道", "蓝莓台", "Zhejiang TV", "浙台", "浙江台"],
