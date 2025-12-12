@@ -99,7 +99,7 @@ def is_url_accessible(url):
     response = request_with_retry(url)
     with lock:
         scan_counter += 1
-        if scan_counter % 500 == 0:
+        if scan_counter % 1000 == 0:
             print(f"【IP扫描进度】已完成 {scan_counter} 个URL，当前可用 {valid_counter} 个")
         if response:
             valid_counter += 1
@@ -192,7 +192,7 @@ def is_channel_accessible(channel_tuple):
         if response:
             channel_valid_counter += 1
             priority = RESOLUTION_PRIORITY[resolution]
-            print(f"【优质频道】{name} | 分辨率：{resolution} | 响应速度：{response_time:.3f}s | {url}")
+            #print(f"【优质频道】{name} | 分辨率：{resolution} | 响应速度：{response_time:.3f}s | {url}")
             return (name, url, priority, response_time)
         else:
             ##print(f"【无效频道】{name} → {url}")
