@@ -393,7 +393,6 @@ CCTV6,http://[2409:8087:1e01:23::10]:8112/000000001000/5000000004000008886/1.m3u
 CCTV6,https://iptv.catvod.com/live.php?id=CCTV-6%20%E7%94%B5%E5%BD%B1
 CCTV6,https://iptv.catvod.com/live.php?id=CCTV-6
 CCTV6,https://iptv.catvod.com/live.php?id=CHC%E5%BD%B1%E8%BF%B7%E7%94%B5%E5%BD%B1%E5%8F%B0
-CCTV6,https://iptv.catvod.com/live.php?id=CHC%E5%8A%A8%E4%BD%9C%E7%94%B5%E5%BD%B1%E5%8F%B0
 CCTV6,http://116.77.33.196:44330/tsfile/live/0007_1.m3u8?key=txiptv&playlive=0&authid=0
 CCTV6,http://125.42.149.129:9901/tsfile/live/1006_1.m3u8?key=txiptv&playlive=1&authid=0
 CCTV6,http://121.19.134.82:808/tsfile/live/0006_1.m3u8?key=txiptv&playlive=1&authid=0
@@ -722,7 +721,8 @@ CCTV17,http://tvtj.jxwltx.com:8003/cctv17.m3u8
 CCTV17,https://live.chinacert.cftest5.cn/mg/?id=673168256
 CCTV17,http://111.29.9.33:6610/000000001000/1000000005000056836/index.m3u8?channel-id=bestzb&Contentid=1000000005000056836&livemode=1&stbId=3
 CHC影迷电影,https://iptv.catvod.com/live.php?id=CHC%E5%BD%B1%E8%BF%B7%E7%94%B5%E5%BD%B1
-CHC家庭影院台,https://iptv.catvod.com/live.php?id=CHC%E5%AE%B6%E5%BA%AD%E5%BD%B1%E9%99%A2%E5%8F%B0
+CHC动作电影,https://iptv.catvod.com/live.php?id=CHC%E5%8A%A8%E4%BD%9C%E7%94%B5%E5%BD%B1%E5%8F%B0
+CHC家庭影院,https://iptv.catvod.com/live.php?id=CHC%E5%AE%B6%E5%BA%AD%E5%BD%B1%E9%99%A2%E5%8F%B0
 CHC家庭影院,http://74.48.192.96:82/live.php?id=CHC家庭影院
 CHC动作电影,http://101.35.240.114:88/live.php?id=CHC动作电影
 CHC影迷电影,http://74.48.192.96:82/live.php?id=CHC影迷电影
