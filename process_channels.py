@@ -1,60 +1,99 @@
 def process_channel_with_alias(text, channel_alias_map):
     """单行处理：支持别名匹配+标准名统一（新增排除列表）"""
-    # -------------------------- 新增：排除不需要的频道 --------------------------
-    EXCLUDE_CHANNELS = {"CCTV-4K", "CCTV4K","台庆"}  # 可按需添加其他无需处理的频道
+    EXCLUDE_CHANNELS = {"CCTV-4K", "CCTV4K", "台庆"}
     parts = text.strip().split(',')
     if len(parts) != 2:
         return text
     input_name, url = parts[0], parts[1]
     
-    # 排除逻辑：输入名称包含排除关键词则直接返回原文本（不参与匹配）
+    # 排除逻辑
     input_name_clean = input_name.lower().replace(' ', '')
     for exclude in EXCLUDE_CHANNELS:
         if exclude.lower().replace(' ', '') in input_name_clean:
-            return text  # 直接返回原行，不进行后续匹配
-    matched_standard = None
-    max_match_len = 0  # 最长匹配优先级：避免短别名误匹配（如“翡翠”不匹配“翡翠台”）
+            return text
     
-    # 遍历所有标准频道及其别名，找最长匹配
+    # 最长匹配优先级逻辑
+    matched_standard = None
+    max_match_len = 0
     for standard_name, aliases in channel_alias_map.items():
-        # 合并标准名和别名，统一匹配（既支持标准名输入，也支持别名输入）
         all_match_strings = [standard_name] + aliases
         for match_str in all_match_strings:
             match_str_clean = match_str.lower().replace(' ', '')
-            if match_str_clean in input_name_clean:
-                # 优先选择匹配长度最长的（确保精准）
-                if len(match_str_clean) > max_match_len:
-                    max_match_len = len(match_str_clean)
-                    matched_standard = standard_name
+            if match_str_clean in input_name_clean and len(match_str_clean) > max_match_len:
+                max_match_len = len(match_str_clean)
+                matched_standard = standard_name
     
-    # 匹配成功则返回标准名，失败则返回原名称
     final_name = matched_standard if matched_standard else input_name
     return f"{final_name},{url}"
 
-# -------------------------- 新增：大段文本处理（不变） --------------------------
-def process_multiline_text(multiline_text, channel_alias_map):
+# -------------------------- 优化：去重逻辑改为「整行唯一」（标准名+URL组合） --------------------------
+def remove_duplicate_channels(lines, keep_strategy="last"):
+    """
+    基于「标准名+URL」组合去重（整行唯一）
+    :param lines: 处理后的频道行列表（已统一标准名）
+    :param keep_strategy: 去重策略 - "first"保留第一个，"last"保留最后一个（默认）
+    :return: 去重后的频道行列表
+    """
+    unique_lines = {}
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        # 以整行作为去重键（确保「标准名+URL」完全相同才去重）
+        if keep_strategy == "last" or line not in unique_lines:
+            unique_lines[line] = line
+    return list(unique_lines.values())
+
+# -------------------------- 整合处理+去重逻辑（不变） --------------------------
+def process_multiline_text(multiline_text, channel_alias_map, keep_strategy="last"):
+    """
+    整合流程：分行处理 → 标准名统一 → 整行去重
+    :param multiline_text: 原始多行文本
+    :param channel_alias_map: 标准名-别名映射表
+    :param keep_strategy: 去重策略（first/last）
+    :return: 最终处理后的文本
+    """
+    # 第一步：分行处理（标准名统一）
     lines = multiline_text.splitlines()
     processed_lines = []
     for line in lines:
         line = line.strip()
         processed_lines.append(process_channel_with_alias(line, channel_alias_map) if line else '')
-    return '\n'.join(processed_lines)
+    
+    # 第二步：整行去重（过滤空行后执行）
+    non_empty_lines = [line for line in processed_lines if line.strip()]
+    deduplicated_lines = remove_duplicate_channels(non_empty_lines, keep_strategy)
+    
+    # 保留原始空行结构（可选）
+    final_lines = []
+    empty_line_flag = False
+    for line in processed_lines:
+        if not line.strip():
+            final_lines.append('')
+            empty_line_flag = True
+        else:
+            if not empty_line_flag:
+                final_lines.extend(deduplicated_lines)
+                empty_line_flag = True
+    if not empty_line_flag and deduplicated_lines:
+        final_lines = deduplicated_lines
+    
+    return '\n'.join(final_lines)
 
-# -------------------------- 核心配置：标准名+别名映射字典（分类整理） --------------------------
+# -------------------------- 核心配置：标准名+别名映射字典（不变） --------------------------
 CHANNEL_ALIAS_MAP = {
-    # 一、广东二字开头核心频道（仅保留“广东”前缀，别名覆盖简称、英文、常见叫法）
+    # 广东二字开头核心频道
     "广东卫视": ["广卫", "GDTV", "广东卫视频道", "广东卫视台", "GD Satellite TV", "广东综合卫视"],
     "广东体育": ["广体", "GD Sports", "广东体育频道", "广东体育台", "GD Sports Channel", "广体频道"],
     "广东新闻": ["广新", "GD News", "广东新闻频道", "广东新闻台", "GD News Channel", "广东新闻综合"],
     "广东珠江": ["珠江台", "GD Zhujiang", "广东珠江频道", "珠江卫视频道", "GD Pearl River Channel"],
-    "广东民生": ["广民", "GD Minsheng", "广东民生频道", "广东公共频道", "广东公共", "GD Minsheng Channel"],  # 修正：广东公共→广东民生
+    "广东民生": ["广民", "GD Minsheng", "广东民生频道", "广东公共频道", "广东公共", "GD Minsheng Channel"],
     "广东影视": ["广影", "GD Film", "广东影视频道", "广东电影频道", "GD Movie Channel", "广影视"],
     "广东综艺": ["广综", "GD Variety", "广东综艺频道", "广东综艺娱乐频道", "GD Variety Show Channel"],
     "广东少儿": ["广少", "GD Kids", "广东少儿频道", "广东儿童频道", "GD Children's Channel", "广东少儿台"],
     "嘉佳卡通": ["嘉佳卫视", "GD Jiajia", "嘉佳卡通频道", "广东嘉佳卡通", "Jiajia Cartoon Channel", "嘉佳台"],
-    # 新增：大湾区卫视
     "大湾区卫视": ["南方卫视","广东南方卫视","南方频道","南方台","广东湾区", "GBA TV", "大湾区卫视频道", "Guangdong Greater Bay Area TV", "GBA Satellite TV"],
-    # 二、央视含数字主要频道（仅核心数字频道，别名覆盖“央视X套”“XX频道”“英文缩写”）
+    # 央视含数字主要频道
     "CCTV1": ["央视一套", "CCTV-1", "CCTV One", "央视综合", "一套","CCTV-1 综合"],
     "CCTV2": ["央视二套", "CCTV-2", "CCTV Finance", "央视财经", "二套"],
     "CCTV3": ["央视三套", "CCTV-3", "CCTV Variety", "央视综艺", "三套"],
@@ -76,7 +115,7 @@ CHANNEL_ALIAS_MAP = {
     "CHC高清电影": ["CHC HD", "华诚高清电影", "CHC高清台", "高清电影台", "CHC High Definition"],
     "CHC动作电影": ["CHC Action", "动作电影台", "CHC动作台", "华诚动作电影", "CHC Action Movies"],
     "CHC家庭影院": ["CHC Family", "家庭影院台", "CHC家庭影院", "华诚家庭影院", "CHC Home Theater"],
-    # 三、常见主要卫视频道（仅核心主流卫视，别名覆盖简称、昵称、英文、缩写）
+    # 常见主要卫视频道
     "湖南卫视": ["芒果台", "HNTV", "湖南卫视频道", "湘卫", "Hunan TV", "芒果卫视", "湖南台"],
     "浙江卫视": ["浙卫", "ZJTV", "浙江卫视频道", "蓝莓台", "Zhejiang TV", "浙台", "浙江台"],
     "东方卫视": ["番茄台", "Dragon TV", "东方卫视频道", "沪卫", "Shanghai TV", "东卫", "上海东方台"],
@@ -116,7 +155,7 @@ CHANNEL_ALIAS_MAP = {
     "康巴卫视": ["康卫"],
     "内蒙古蒙语卫视": ["蒙语卫视"],
     "海江卫视": ["海江卫"],
-    # 四、港澳台常见主要频道（仅核心主流频道，别名覆盖简称、英文、当地叫法）
+    # 港澳台常见主要频道
     "翡翠台": ["翡翠台", "无线翡翠台", "无线翡翠", "Jade TV", "TVB Jade", "翡翠卫视", "无线台"],
     "TVB明珠台": ["明珠台", "Pearl TV", "TVB Pearl", "无线明珠台", "明珠卫视", "英文台"],
     "TVB星河台": ["TVB频道","星河台", "TVB Star River", "无线星河台", "星河卫视", "Star River Channel"],
@@ -141,17 +180,14 @@ CHANNEL_ALIAS_MAP = {
     "千禧经典台": [ "Millennium Classic", "TVB经典台", "千禧经典", "无线千禧","Millennium Channel"],
     "美亚电影台": ["美亚电影", "Meiya Movies", "美亚电影频道", "Meiya Film Channel", "MA Movies"]
 }
-# -------------------------- 测试：别名场景处理效果 --------------------------
-input_multiline_text = """
-无线翡翠台-高清,http://111.111
+
+# -------------------------- 测试：验证「整行唯一」去重效果 --------------------------
+if __name__ == "__main__":
+    input_multiline_text = """
+无线翡翠台-高清,http://111.111  # 标准名统一为「翡翠台」
+
 """
-
-# 执行处理
-processed_text = process_multiline_text(input_multiline_text, CHANNEL_ALIAS_MAP)
-
-# 输出结果
-print("处理前（含别名）：")
-print(input_multiline_text)
-print("="*50)
-print("处理后（统一标准名）：")
-print(processed_text)
+    print("=== 测试「整行唯一」去重（保留最后一个）===")
+    processed_text = process_multiline_text(input_multiline_text, CHANNEL_ALIAS_MAP, keep_strategy="last")
+    print("处理后：")
+    print(processed_text)
