@@ -169,7 +169,6 @@ player=2
 翡翠台,http://rihou.cc:555/tv/[SX]无线翡翠
 翡翠台,http://iptv.4666888.xyz/iptv2A.php?id=34
 翡翠台,http://beishan008.asuscomm.com:8889/bysid/1.m3u8
-翡翠台,http://bxtv.3a.ink/api.php?id=fct
 翡翠台,https://mgev.188766.xyz/?migutoken=a1c6c02755b0007be708ac132c8120c9&id=hk_fct4k&type=dy
 翡翠台,https://mgev.188766.xyz/?migutoken=cf420890676263203350310d042cb803&id=hk_fct&type=dy
 翡翠台,https://cdn6.163189.xyz/163189/fct4k
@@ -188,7 +187,6 @@ player=2
 无线新闻台,http://rihou.cc:555/tv/[SX]无线新闻
 无线新闻台,P2p://starvod.xyz:19806/557d5098116e4e1f9b14008ed764cc71.ts
 无线新闻台,http://beishan008.asuscomm.com:8890/bysid/83.m3u8
-无线新闻台,http://bxtv.3a.ink/api.php?id=wxxw
 无线新闻台,https://mgev.188766.xyz/?migutoken=471400164b72f41a1c9fe3f2b7982838&id=hk_wxxw&type=dy
 无线新闻台,http://r.jdshipin.com/CkuBd
 NOW新闻台,https://mgev.188766.xyz/?migutoken=1256d83adf1d4167b9544661f454db23&id=hk_now&type=dy
@@ -206,7 +204,6 @@ NOW新闻台,https://yang-1989.eu.org/live/now-332
 中天新闻台,http://210.61.15.55:50007/of-4gtv-4gtv009/index.m3u8?proxy=true
 中天新闻台,http://210.61.15.55:50007/li-4gtv-4gtv009/index.m3u8?proxy=true
 中天新闻台,http://210.61.15.55:50007/4gtv-4gtv009/index.m3u8?proxy=true
-中天新闻台,http://bxtv.3a.ink/api.php?id=ztxw
 美亚电影台,https://tvb.go-iptv.ggff.net/stream/tvb/hk/master.m3u8?u=admins&p=fa956b808c8f8e3b59be14d7d584761e041a8359d58ba7e1829f12605d76203a
 美亚电影台,http://rihou.cc:555/tv/[Hk]美亚电影
 美亚电影台,http://rihou.cc:555/tv/[Hk]美亚电影
@@ -219,9 +216,7 @@ NOW新闻台,https://yang-1989.eu.org/live/now-332
 美亚电影台,http://iptv.4666888.xyz/iptv2A.php?id=30
 千禧经典台,P2p://starvod.xyz:19806/8cf149d3490640d298e3bce48cd0e8ae.ts
 美亚电影台,P2p://starvod.xyz:19806/f9cdad09f3cc47bc83ba1d94167ebe64.ts
-美亚电影台,http://bxtv.3a.ink/api.php?id=meiya
 美亚电影台,http://php.jdshipin.com/TVOD/iptv.php?id=meiya
-千禧经典台,http://bxtv.3a.ink/api.php?id=qxjd
 央视频道,#genre#
 player=2
 CCTV1,http://[2409:8087:1e01:23::10]:8112/000000000000/6000000001000029752/1.m3u8
@@ -1390,7 +1385,6 @@ player=2
 海峡卫视,http://38.64.72.148:80/hls/modn/list/4009/playlist.m3u8
 海峡卫视,http://38.64.72.148:80/hls/modn/list/4009/chunklist0.m3u8
 藏语卫视,http://php.jdshipin.com:8880/xztv.php?id=zy
-凤凰卫视中文台,http://bxtv.3a.ink/api.php?id=fhzw
 凤凰卫视中文台,http://r.jdshipin.com/cCCzW
 人间卫视,http://61.216.67.119:1935/bltvhd/bltv1/chunklist_w1266569526.m3u8
 人间卫视,http://61.216.67.119:1935/bltvhd/bltv1/chunklist_w1266569526.m3u8
