@@ -10,6 +10,7 @@ TIMEOUT = 10                   # 网络请求超时时间
 # 2. 资源合并配置（参数区合并：资源信息+合并顺序绑定）
 # 格式：[(资源标识, URL/None), ...] | URL=None→本地文件，列表顺序=合并顺序
 RESOURCE_MERGE_CONFIG = [
+    ('GDTY', 'https://877622.xyz/gdty.txt'),  # 0. GDTY GDTY
     ('ipv6_m3u', 'https://877622.xyz/m2t.php?url=https://kakaxi-1.asia/ipv6.m3u'),  # 1. IPv6 M3U
     ('cat_tv', 'https://877622.xyz/m2t.php?url=https://iptv.catvod.com/tv.m3u'),  # 2. TV.M3U
     ('local_file', None),  # 3. 本地文件
