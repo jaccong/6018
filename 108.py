@@ -30,7 +30,7 @@ CATEGORY_CONFIG = [
 ]
 
 # 4. 过滤关键词
-REMOVE_KEYWORDS = ['smt', 'smart', 'Smart', 'cmvideo', 'mobile', '/rtp/', '/udp/', '台庆']
+REMOVE_KEYWORDS = ['smt', 'smart', 'Smart', 'cmvideo', 'mobile', '/rtp/', '/udp/', '台庆','[Bx']
 WS_REMOVE_KEYWORDS = REMOVE_KEYWORDS + ['大湾区卫视', '广东卫视']
 
 # 5. 网络请求头
