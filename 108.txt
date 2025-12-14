@@ -158,8 +158,6 @@ player=2
 翡翠台,https://tvb.go-iptv.ggff.net/stream/tvb/feicui4k/master.m3u8?u=admins&p=fa956b808c8f8e3b59be14d7d584761e041a8359d58ba7e1829f12605d76203a
 翡翠台,http://rihou.cc:555/tv/[Mt]无线翡翠
 翡翠台,http://rihou.cc:555/tv/[Mt]无线翡翠
-翡翠台,http://rihou.cc:555/tv/[Bx]无线翡翠
-翡翠台,http://rihou.cc:555/tv/[Bx]无线翡翠
 翡翠台,http://rihou.cc:555/tv/[SZ]无线翡翠
 翡翠台,http://tl.061833.xyz/tl/null
 翡翠台,http://rihou.cc:555/tv/[PL]无线翡4k
@@ -185,8 +183,6 @@ player=2
 无线新闻台,http://rihou.cc:555/tv/[Mt]无线新闻
 无线新闻台,http://rihou.cc:555/tv/[Mt]无线新闻
 无线新闻台,http://rihou.cc:555/tv/[SZ]无线新闻
-无线新闻台,http://rihou.cc:555/tv/[Bx]无线新闻
-无线新闻台,http://rihou.cc:555/tv/[Bx]无线新闻
 无线新闻台,http://tl.061833.xyz/tl/null-11
 无线新闻台,http://rihou.cc:555/tv/[PL]无线新闻
 无线新闻台,http://rihou.cc:555/tv/[SX]无线新闻
@@ -207,8 +203,6 @@ NOW新闻台,https://yang-1989.eu.org/live/now-332
 中天新闻台,http://rihou.cc:555/tv/[SZ]中天新闻
 中天新闻台,http://rihou.cc:555/tv/[Hk]中天新闻
 中天新闻台,http://rihou.cc:555/tv/[Hk]中天新闻
-中天新闻台,http://rihou.cc:555/tv/[Bx]中天新闻
-中天新闻台,http://rihou.cc:555/tv/[Bx]中天新闻
 中天新闻台,http://210.61.15.55:50007/of-4gtv-4gtv009/index.m3u8?proxy=true
 中天新闻台,http://210.61.15.55:50007/li-4gtv-4gtv009/index.m3u8?proxy=true
 中天新闻台,http://210.61.15.55:50007/4gtv-4gtv009/index.m3u8?proxy=true
@@ -216,10 +210,6 @@ NOW新闻台,https://yang-1989.eu.org/live/now-332
 美亚电影台,https://tvb.go-iptv.ggff.net/stream/tvb/hk/master.m3u8?u=admins&p=fa956b808c8f8e3b59be14d7d584761e041a8359d58ba7e1829f12605d76203a
 美亚电影台,http://rihou.cc:555/tv/[Hk]美亚电影
 美亚电影台,http://rihou.cc:555/tv/[Hk]美亚电影
-美亚电影台,http://rihou.cc:555/tv/[Bx]美亚电影
-美亚电影台,http://rihou.cc:555/tv/[Bx]美亚电影
-千禧经典台,http://rihou.cc:555/tv/[Bx]无线千禧
-千禧经典台,http://rihou.cc:555/tv/[Bx]无线千禧
 美亚电影台,http://tl.061833.xyz/tl/null-5
 千禧经典台,http://rihou.cc:555/tv/[PL]无线千禧
 美亚电影台,http://rihou.cc:555/tv/[PL]美亚电影
@@ -1344,8 +1334,6 @@ player=2
 西藏卫视,http://t.061899.xyz/tl/tl.php?id=xzws
 凤凰卫视中文台,http://rihou.cc:555/tv/[Pd]凤凰中文
 凤凰卫视中文台,http://rihou.cc:555/tv/[Pd]凤凰中文
-凤凰卫视中文台,http://rihou.cc:555/tv/[Bx]凤凰中文
-凤凰卫视中文台,http://rihou.cc:555/tv/[Bx]凤凰中文
 星空卫视,http://xhyx.gz.cn:1698/hls/35/index.m3u8
 星空卫视,http://iot-mqqt.111yao.cn:8080/live/diyp_xingkong.m3u8
 星空卫视,http://122.224.58.42:85/tsfile/live/1024_1.m3u8?key=txiptv&playlive=1&authid=0
