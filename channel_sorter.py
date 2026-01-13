@@ -44,6 +44,20 @@ def sorter_main(original_channels: list, custom_order: list) -> list:
 
 # 定义自定义排序规则（可自行修改）
 custom_order = [
+    "116.77.33",
+    "74.91.26",
+    "catvod",
+    "rihou",
+    "4666888",
+    "188766",
+    "tvtj",
+    "migu",
+    "/mg/",
+    "163189"
+]
+
+
+custom_order = [
     "广东卫视",
     "广东珠江",
     "广东体育",
