@@ -124,6 +124,3 @@ custom_name_order = [
     "河南卫视",
     "湖北卫视"
 ]
-
-    sorted_result = sorter_main(test_channels, custom_name_order, custom_link_order)
-    print_channel_list("URL优先排序后频道列表", sorted_result)
