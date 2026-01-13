@@ -1,4 +1,3 @@
-
 def extract_channel_name(channel_str: str) -> str:
     """从"频道名,URL"格式的字符串中提取频道名"""
     if not isinstance(channel_str, str) or len(channel_str.strip()) == 0:
@@ -7,18 +6,45 @@ def extract_channel_name(channel_str: str) -> str:
     return parts[0].strip() if parts else ""
 
 
-def sort_channels_by_custom_order(original_channels: list, custom_order: list) -> list:
-    """按自定义顺序对频道列表排序"""
+def extract_channel_url(channel_str: str) -> str:
+    """从"频道名,URL"格式的字符串中提取URL"""
+    if not isinstance(channel_str, str) or len(channel_str.strip()) == 0:
+        return ""
+    parts = channel_str.strip().split(',', 1)
+    return parts[1].strip() if len(parts) >= 2 else ""
+
+
+def sort_channels_by_custom_order(original_channels: list, custom_name_order: list, custom_link_order: list) -> list:
+    """按【自定义URL关键字顺序(高优先级)】+【自定义频道名顺序】对频道列表排序"""
     if not isinstance(original_channels, list) or len(original_channels) == 0:
         return []
     
-    order_map = {name: idx for idx, name in enumerate(custom_order)}
-    max_defined_idx = len(custom_order)
+    # 构建URL关键字-优先级映射
+    link_order_map = {keyword: idx for idx, keyword in enumerate(custom_link_order)}
+    max_link_idx = len(custom_link_order)
     
+    # 构建频道名-优先级映射
+    name_order_map = {name: idx for idx, name in enumerate(custom_name_order)}
+    max_name_idx = len(custom_name_order)
+
     def get_sort_key(channel_str: str) -> tuple:
+        channel_url = extract_channel_url(channel_str)
         channel_name = extract_channel_name(channel_str)
-        weight = order_map.get(channel_name, max_defined_idx + original_channels.index(channel_str))
-        return (weight, original_channels.index(channel_str))
+        
+        # 优先级1: URL关键字匹配度（更高优先级）
+        link_weight = max_link_idx
+        for keyword, idx in link_order_map.items():
+            if keyword in channel_url:
+                link_weight = idx
+                break
+        
+        # 优先级2: 频道名匹配度
+        name_weight = name_order_map.get(channel_name, max_name_idx)
+        
+        # 优先级3: 原列表索引（保证排序稳定性）
+        original_idx = original_channels.index(channel_str)
+        
+        return (link_weight, name_weight, original_idx)
     
     sorted_channels = sorted(original_channels, key=get_sort_key)
     return sorted_channels
@@ -34,15 +60,13 @@ def print_channel_list(list_name: str, channel_list: list) -> None:
         print(f"  {idx}. {channel}")
 
 
-def sorter_main(original_channels: list, custom_order: list) -> list:
+def sorter_main(original_channels: list, custom_name_order: list, custom_link_order: list) -> list:
     """主函数：执行排序并返回结果"""
-    sorted_channels = sort_channels_by_custom_order(original_channels, custom_order)
-    ##print_channel_list("原始频道列表", original_channels)
-    ##print_channel_list("按自定义顺序排序后的频道列表", sorted_channels)
+    sorted_channels = sort_channels_by_custom_order(original_channels, custom_name_order, custom_link_order)
     return sorted_channels
 
 
-# 定义自定义排序规则（可自行修改）
+# 自定义排序规则
 custom_link_order = [
     "116.77.33",
     "74.91.26",
@@ -56,8 +80,7 @@ custom_link_order = [
     "163189"
 ]
 
-
-custom_order = [
+custom_name_order = [
     "广东卫视",
     "广东珠江",
     "广东体育",
@@ -101,3 +124,6 @@ custom_order = [
     "河南卫视",
     "湖北卫视"
 ]
+
+    sorted_result = sorter_main(test_channels, custom_name_order, custom_link_order)
+    print_channel_list("URL优先排序后频道列表", sorted_result)
