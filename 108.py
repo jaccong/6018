@@ -66,7 +66,7 @@ def read_local_file(filename):
 
 # ==================== 外部模块导入 ====================
 from process_channels import process_multiline_text, CHANNEL_ALIAS_MAP
-from channel_sorter import sorter_main, custom_order, custom_link_order
+from channel_sorter import sorter_main, custom_name_order, custom_link_order
 
 # ==================== 核心执行流程 ====================
 def main():
@@ -113,8 +113,7 @@ def main():
     # 5. 筛选有效链接并排序
     print("\n📊 筛选有效链接并排序...")
     valid_links = re.findall(r'.*\,.*:\/\/.*', processed_data)
-    valid_links = sorter_main(valid_links, custom_link_order)
-    sorted_links = sorter_main(valid_links, custom_order)
+    sorted_links = sorter_main(valid_links, custom_name_order,custom_link_order)
     print(f"✅ 筛选完成 | 有效链接总数: {len(sorted_links)}")
     
     # 6. 分类写入文件
