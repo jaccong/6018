@@ -113,6 +113,7 @@ def main():
     # 5. 筛选有效链接并排序
     print("\n📊 筛选有效链接并排序...")
     valid_links = re.findall(r'.*\,.*:\/\/.*', processed_data)
+    valid_links = sorter_main(valid_links, custom_link_order)
     sorted_links = sorter_main(valid_links, custom_order)
     print(f"✅ 筛选完成 | 有效链接总数: {len(sorted_links)}")
     
