@@ -44,7 +44,7 @@ def sort_channels_by_custom_order(original_channels: list, custom_name_order: li
         # 优先级3: 原列表索引（保证排序稳定性）
         original_idx = original_channels.index(channel_str)
         
-        return (link_weight, name_weight, original_idx)
+        return (name_weight, link_weight, original_idx)
     
     sorted_channels = sorted(original_channels, key=get_sort_key)
     return sorted_channels
