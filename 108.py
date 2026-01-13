@@ -66,7 +66,7 @@ def read_local_file(filename):
 
 # ==================== 外部模块导入 ====================
 from process_channels import process_multiline_text, CHANNEL_ALIAS_MAP
-from channel_sorter import sorter_main, custom_order
+from channel_sorter import sorter_main, custom_order, custom_link_order
 
 # ==================== 核心执行流程 ====================
 def main():
