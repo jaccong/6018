@@ -43,7 +43,7 @@ def sorter_main(original_channels: list, custom_order: list) -> list:
 
 
 # 定义自定义排序规则（可自行修改）
-custom_order = [
+custom_link_order = [
     "116.77.33",
     "74.91.26",
     "catvod",
