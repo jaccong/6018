@@ -68,8 +68,6 @@ def sorter_main(original_channels: list, custom_name_order: list, custom_link_or
 
 # 自定义排序规则
 custom_link_order = [
-    "116.77.33",
-    "74.91.26",
     "catvod",
     "rihou",
     "4666888",
@@ -81,7 +79,9 @@ custom_link_order = [
     "mgtv",
     "migu",
     "/mg/",
-    "163189"
+    "163189",
+    "116.77.33",
+    "74.91.26",
 ]
 
 custom_name_order = [
