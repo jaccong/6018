@@ -30,26 +30,32 @@ jobs:
           cache-dependency-path: 'requirements.txt'
       - name: 安装系统依赖（Chrome + ChromeDriver）
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip curl jq
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f -y
+              sudo apt-get update
+              sudo apt-get install -y wget unzip curl jq
+              wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+              sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get install -f -y
 
-          CHROME_VERSION=$(google-chrome --version | grep -oP '(\d+\.){3}\d+')
-          echo "Chrome 版本：$CHROME_VERSION"
+              # 获取 Chrome 版本
+              CHROME_VERSION=$(google-chrome --version | grep -oP '(\d+\.){3}\d+')
+              echo "Chrome 版本：$CHROME_VERSION"
 
-          CHROMEDRIVER_VERSION=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/latest-patch-version-for-build/$CHROME_VERSION | jq -r '.version')
-          if [ "$CHROMEDRIVER_VERSION" = "null" ] || [ -z "$CHROMEDRIVER_VERSION" ]; then
-            CHROMEDRIVER_VERSION=$CHROME_VERSION
-          fi
-          echo "使用 ChromeDriver 版本：$CHROMEDRIVER_VERSION"
+              # 提取主版本号（最稳定方案，彻底避免 404 + jq 错误）
+              CHROME_MAIN=$(echo $CHROME_VERSION | cut -d '.' -f 1)
+              echo "Chrome 主版本：$CHROME_MAIN"
 
-          wget -O chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip
-          unzip -o chromedriver.zip
-          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
-          sudo chmod +x /usr/local/bin/chromedriver
+              # 直接获取该主版本的最新官方驱动
+              CHROMEDRIVER_VERSION=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone.json \
+                | jq -r ".milestones.\"$CHROME_MAIN\".version")
 
-          chromedriver --version
+              echo "使用 ChromeDriver 版本：$CHROMEDRIVER_VERSION"
+
+              # 下载安装
+              wget -O chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip
+              unzip -o chromedriver.zip
+              sudo mv chromedriver-linux64/chromedriver /usr/local/bin/
+              sudo chmod +x /usr/local/bin/chromedriver
+
+              chromedriver --version
       - name: 安装 Python 依赖
         run: |
           pip install --upgrade pip
