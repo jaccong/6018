@@ -3,7 +3,7 @@ import re
 
 # ==================== 重要参数前置（所有配置集中管理）====================
 # 1. 输入输出配置
-INPUT_LOCAL_FILE = 'test.txt'  # 本地输入文件
+INPUT_LOCAL_FILE = 'time.txt'  # 本地输入文件
 OUTPUT_FILE = '108.txt'        # 最终输出文件
 TIMEOUT = 10                   # 网络请求超时时间
 
