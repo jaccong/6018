@@ -10,17 +10,8 @@ TIMEOUT = 10                   # 网络请求超时时间
 # 2. 资源合并配置（参数区合并：资源信息+合并顺序绑定）
 # 格式：[(资源标识, URL/None), ...] | URL=None→本地文件，列表顺序=合并顺序
 RESOURCE_MERGE_CONFIG = [
-    ('GDTY', 'https://877622.xyz/gdty.txt'),  # 0. GDTY GDTY
-    ('cf_txt', 'https://tvv.jaccong.workers.dev/'), 
-    ('ipv6_m3u', 'https://877622.xyz/m2t.php?url=https://kakaxi-1.asia/ipv6.m3u'),  # 1. IPv6 M3U
-    ('cat_tv', 'https://877622.xyz/m2t.php?url=https://iptv.catvod.com/tv.m3u'),  # 2. TV.M3U
-    ('local_file', None),  # 3. 本地文件
-    ('aptv_m3u', 'https://877622.xyz/m2t.php?url=https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u'), # 8. APTV M3U
-    ('bcitv_itv', 'https://877622.xyz/m2t.php?url=https://188766.xyz/itv'),  # 7. BCITV
-    ('ipv4_txt', 'https://raw.githubusercontent.com/kakaxi-1/IPTV/refs/heads/main/ipv4.txt'),  # 4. IPv4 TXT
-    ('rihou_nzk', 'http://rihou.cc:555/gggg.nzk'),  # 5. 日候 NZK
-    ('taoip_yd', 'https://taoiptv.com/lives/44015.txt?token=ebb8d0b4221cce56'),  # 7. taoip
-    ('shulao_txt', 'https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1')  # 6. 树老 TXT
+    ('cf_live', 'https://o.877622.xyz/live'),
+    ('mengmeng','http://45.192.97.170:5211/365987')
 ]
 
 # 3. 频道分类配置
