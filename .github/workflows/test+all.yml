@@ -63,7 +63,7 @@ jobs:
 
       # -------------------------- 第二步：执行 108.py（读取本地最新 test.txt） --------------------------
       - name: 运行 108.py 脚本（依赖 test.txt）
-        if: env.test_exists == 'true'  # 只有 test.txt 有效才执行，避免报错
+        ##if: env.test_exists == 'true'  # 只有 test.txt 有效才执行，避免报错
         run: python ${{ github.workspace }}/108.py
         env:
           PYTHONUNBUFFERED: 1
