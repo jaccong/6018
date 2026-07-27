@@ -59,11 +59,38 @@ jobs:
       - name: 安装 Python 依赖
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt requests  # 包含 108.py 可能需要的 requests
+          pip install -r requirements.txt requests
 
-      # -------------------------- 第二步：执行 108.py（读取本地最新 test.txt） --------------------------
-      - name: 运行 108.py 脚本（依赖 test.txt）
-        ##if: env.test_exists == 'true'  # 只有 test.txt 有效才执行，避免报错
+      - name: 运行 time.py 爬取脚本
+        run: python ${{ github.workspace }}/time.py
+        env:
+          PYTHONUNBUFFERED: 1
+
+      - name: 检查 time.txt 有效性
+        id: check_time
+        run: |
+          if [ -f "time.txt" ] && [ -s "time.txt" ]; then
+            echo "time_exists=true" >> $GITHUB_ENV
+            echo "time_size=$(du -sh time.txt | awk '{print $1}')" >> $GITHUB_ENV
+          else
+            echo "time_exists=false" >> $GITHUB_ENV
+          fi
+
+      - name: 提交 time.txt 到远程仓库
+        if: env.time_exists == 'true'
+        run: |
+          git config --local user.email "jaccong@163.com"
+          git config --local user.name "jaccong"
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          git pull --rebase origin $BRANCH || true
+          git add time.txt
+          git commit -m "Auto update time.txt: $(date +'%Y-%m-%d %H:%M:%S')" || echo "time.txt 无更新，跳过提交"
+          git push origin $BRANCH
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 运行 108.py 脚本（依赖 time.txt）
+        if: env.time_exists == 'true'
         run: python ${{ github.workspace }}/108.py
         env:
           PYTHONUNBUFFERED: 1
@@ -72,7 +99,7 @@ jobs:
         id: check_108
         run: |
           if [ -f "108.txt" ] && [ -s "108.txt" ]; then
-            echo "txt108_exists=true" >> $GITHUB_ENV  # 修正：环境变量名不能以数字开头
+            echo "txt108_exists=true" >> $GITHUB_ENV
             echo "txt108_size=$(du -sh 108.txt | awk '{print $1}')" >> $GITHUB_ENV
           else
             echo "txt108_exists=false" >> $GITHUB_ENV
@@ -84,14 +111,13 @@ jobs:
           git config --local user.email "jaccong@163.com"
           git config --local user.name "jaccong"
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          git pull --rebase origin $BRANCH || true  # 再次拉取，避免两次提交冲突
+          git pull --rebase origin $BRANCH || true
           git add 108.txt
           git commit -m "Auto update 108.txt: $(date +'%Y-%m-%d %H:%M:%S')" || echo "108.txt 无更新，跳过提交"
           git push origin $BRANCH
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # -------------------------- 最终执行报告 --------------------------
       - name: 输出完整执行报告
         run: |
           echo "======================================"
@@ -99,19 +125,4 @@ jobs:
           echo "======================================"
           echo "执行时间：$(date +'%Y-%m-%d %H:%M:%S')"
           echo "--------------------------------------"
-          echo "test.txt 状态: ${{ env.test_exists == 'true' && '✅ 成功' || '❌ 失败' }}"
-          if [ "${{ env.test_exists }}" = "true" ]; then
-            echo "test.txt 大小: ${{ env.test_size }}"
-            echo "test.txt 前5行预览:"
-            head -n 5 test.txt
-          fi
-          echo "--------------------------------------"
-          echo "108.txt 状态: ${{ env.txt108_exists == 'true' && '✅ 成功' || '❌ 失败' }}"
-          if [ "${{ env.txt108_exists }}" = "true" ]; then
-            echo "108.txt 大小: ${{ env.txt108_size }}"
-            echo "108.txt 前5行预览:"
-            head -n 5 108.txt
-            echo "======================================"
-            wget -q -O - "http://jaccong0520.serv00.net/live-data/list.php"
-          fi
-          echo "======================================"
+          echo "time.txt 状态: ${{ env.time_exists == 'true' && '✅ 成功' || '❌ 失败' }}"
