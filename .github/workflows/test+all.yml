@@ -61,35 +61,6 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt requests  # 包含 108.py 可能需要的 requests
 
-      # -------------------------- 第一步：执行 test.py 生成 test.txt --------------------------
-      - name: 运行 test.py 爬取脚本
-        run: python ${{ github.workspace }}/test.py
-        env:
-          PYTHONUNBUFFERED: 1  # 实时输出日志，便于调试
-
-      - name: 检查 test.txt 有效性（108.py 依赖此文件）
-        id: check_test
-        run: |
-          if [ -f "test.txt" ] && [ -s "test.txt" ]; then
-            echo "test_exists=true" >> $GITHUB_ENV
-            echo "test_size=$(du -sh test.txt | awk '{print $1}')" >> $GITHUB_ENV
-          else
-            echo "test_exists=false" >> $GITHUB_ENV
-          fi
-
-      - name: 提交 test.txt 到远程仓库
-        if: env.test_exists == 'true'
-        run: |
-          git config --local user.email "jaccong@163.com"
-          git config --local user.name "jaccong"
-          BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          git pull --rebase origin $BRANCH || true  # 拉取远程更新，避免冲突
-          git add test.txt
-          git commit -m "Auto update test.txt: $(date +'%Y-%m-%d %H:%M:%S')" || echo "test.txt 无更新，跳过提交"
-          git push origin $BRANCH
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       # -------------------------- 第二步：执行 108.py（读取本地最新 test.txt） --------------------------
       - name: 运行 108.py 脚本（依赖 test.txt）
         if: env.test_exists == 'true'  # 只有 test.txt 有效才执行，避免报错
