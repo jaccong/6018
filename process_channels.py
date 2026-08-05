@@ -1,6 +1,6 @@
 def process_channel_with_alias(text, channel_alias_map):
     """单行处理：支持别名匹配+标准名统一（新增排除列表）"""
-    EXCLUDE_CHANNELS = {"CCTV-4K", "CCTV4K", "台庆"}
+    EXCLUDE_CHANNELS = {"CCTV-4K", "CCTV4K", "台庆","华丽"}
     parts = text.strip().split(',')
     if len(parts) != 2:
         return text
