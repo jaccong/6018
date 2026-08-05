@@ -117,12 +117,32 @@ jobs:
           git push origin $BRANCH
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 输出完整执行报告
-        run: |
-          echo "======================================"
-          echo "          IPTV 自动更新报告"
-          echo "======================================"
-          echo "执行时间：$(date +'%Y-%m-%d %H:%M:%S')"
-          echo "--------------------------------------"
-          echo "time.txt 状态: ${{ env.time_exists == 'true' && '✅ 成功' || '❌ 失败' }}"
+# -------------------------- 最终执行报告 --------------------------
+       - name: 输出完整执行报告
+         run: |
+           echo "======================================"
+           echo "          IPTV 自动更新报告"
+           echo "======================================"
+           echo "执行时间：$(date +'%Y-%m-%d %H:%M:%S')"
+           echo "--------------------------------------"
+           
+           # time.txt 信息展示
+           if [ "${{ env.time_exists }}" = "true" ]; then
+             echo "time.txt 状态: ✅ 成功"
+             echo "time.txt 文件大小: ${{ env.time_size }}"
+             head -n 5 time.txt
+           else
+             echo "time.txt 状态: ❌ 失败（文件为空/不存在）"
+           fi
+           echo "--------------------------------------"
+           # 108.txt 信息展示
+           if [ "${{ env.txt108_exists }}" = "true" ]; then
+             echo "108.txt 状态: ✅ 成功"
+             echo "108.txt 文件大小: ${{ env.txt108_size }}"
+             echo "--------------------------------------"
+             echo "远程服务数据接口返回："
+             wget -q -O - "http://jaccong0520.serv00.net/live-data/list.php" || echo "接口请求失败，无法获取远程数据"
+           else
+             echo "108.txt 状态: ❌ 失败（文件为空/不存在）"
+           fi
+           echo -e "\n======================================"
