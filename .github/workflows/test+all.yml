@@ -142,7 +142,7 @@ jobs:
             head -n 5 108.txt
             echo "--------------------------------------"
             echo "远程服务数据接口返回："
-            wget -q -O - "http://jaccong0520.serv00.net/live-data/list.php" || echo "接口请求失败，无法获取远程数据"
+            wget -q -O - "http://jaccong0520.serv00.net/live-data/list-test.php" || echo "接口请求失败，无法获取远程数据"
           else
             echo "108.txt 状态: ❌ 失败（文件为空/不存在）"
           fi
