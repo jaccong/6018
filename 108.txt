@@ -993,5 +993,5 @@ player=2
 广西卫视,http://111.29.9.37:6610/000000001000/1000000002000019837/index.m3u8?stbId=3&livemode=1&IASHttpSessionId=OTT
 农林卫视,http://8.138.7.223/%E3%80%90%E5%85%AC%E4%BC%97%E5%8F%B7%EF%BC%9A%E6%A6%B4%E8%8A%92%E7%94%B5%E8%A7%86%E3%80%91/%E5%86%9C%E6%9E%97%E5%8D%AB%E8%A7%86.m3u8
 自动更新,#genre#
-[ 08/11 18:38 ],https://jaccong0520.serv00.net/da.mp4
+[ 08/11 20:32 ],https://jaccong0520.serv00.net/da.mp4
 
