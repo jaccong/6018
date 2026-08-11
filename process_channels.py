@@ -1,17 +1,24 @@
 def process_channel_with_alias(text, channel_alias_map):
-    """单行处理：支持别名匹配+标准名统一（新增排除列表）"""
-    EXCLUDE_CHANNELS = {"CCTV-4K", "CCTV4K", "台庆","华丽"}
-    parts = text.strip().split(',')
+    """单行处理：包含【华丽】直接删除线路；其余支持别名匹配+标准名统一"""
+    EXCLUDE_CHANNELS = {"CCTV-4K", "CCTV4K", "台庆"}
+    text_strip = text.strip()
+    parts = text_strip.split(',')
     if len(parts) != 2:
-        return text
+        return text_strip if text_strip else ""
+
     input_name, url = parts[0], parts[1]
-    
-    # 排除逻辑
     input_name_clean = input_name.lower().replace(' ', '')
+
+    # 优先级最高：名称包含「华丽」 → 直接丢弃该行
+    if "华丽" in input_name_clean:
+        return None
+
+    # 原有黑名单：命中仅不更名，保留频道
     for exclude in EXCLUDE_CHANNELS:
-        if exclude.lower().replace(' ', '') in input_name_clean:
-            return text
-    
+        ec = exclude.lower().replace(' ', '')
+        if ec in input_name_clean:
+            return text_strip
+
     # 最长匹配优先级逻辑
     matched_standard = None
     max_match_len = 0
