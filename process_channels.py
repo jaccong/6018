@@ -11,7 +11,7 @@ def process_channel_with_alias(text, channel_alias_map):
 
     # 优先级最高：名称包含「华丽」 → 直接丢弃该行
     if "华丽" in input_name_clean:
-        return None
+        return ""
 
     # 原有黑名单：命中仅不更名，保留频道
     for exclude in EXCLUDE_CHANNELS:
