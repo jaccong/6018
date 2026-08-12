@@ -5,7 +5,7 @@ import re
 # 1. 输入输出配置
 INPUT_LOCAL_FILE = 'time.txt'  # 本地输入文件
 OUTPUT_FILE = '108.txt'        # 最终输出文件
-TIMEOUT = 10                   # 网络请求超时时间
+TIMEOUT = 20                   # 网络请求超时时间
 
 # 2. 资源合并配置（参数区合并：资源信息+合并顺序绑定）
 # 格式：[(资源标识, URL/None), ...] | URL=None→本地文件，列表顺序=合并顺序
