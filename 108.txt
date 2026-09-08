@@ -295,7 +295,6 @@ CCTV13,http://123.149.78.254:7788/962067517
 CCTV13,http://120.4.118.150:1234/962067517
 CCTV13,http://112.26.106.165:7788/962067517
 CCTV13,http://jxj.zhgdyun.com:1234/962067517
-CCTV13,http://pull-hs-f5.flive.douyincdn.com/game/stream-120045662263837470/index.m3u8?expire=1789429758&sign=79fdbcc572b4c0152aa66da9f0338bdb&volcSecret=79fdbcc572b4c0152aa66da9f0338bdb&volcTime=1789429758&arch_hrchy=w1&exp_hrchy=w1&major_anchor_level=common&t_id=037-20260908074917333DBA58D8E9CE4CE99E-09PpwR
 CCTV13,http://45.192.97.170:8880/play/14.m3u8
 CCTV13,http://120.48.113.49:6006/608807423
 CCTV13,http://111.29.9.33:6610/000000001000/1000000002000021303/index.m3u8?channel-id=bestzb&Contentid=1000000002000021303&livemode=1&stbId=3
@@ -695,5 +694,5 @@ player=2
 陕西卫视,http://45.192.97.170:8880/play/361.m3u8
 凤凰卫视中文台,http://45.192.97.170:8880/play/378.m3u8
 自动更新,#genre#
-[ 09/08 07:49 ],https://jaccong0520.serv00.net/da.mp4
+[ 09/08 09:29 ],https://jaccong0520.serv00.net/da.mp4
 
