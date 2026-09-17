@@ -11,9 +11,10 @@ TIMEOUT = 20                   # 网络请求超时时间
 # 格式：[(资源标识, URL/None), ...] | URL=None→本地文件，列表顺序=合并顺序
 RESOURCE_MERGE_CONFIG = [
     ('gdty','http://877622.xyz/gdty.txt'),
-    ('cf_live', 'https://o.877622.xyz/live'),
-    ('kulao','http://877622.xyz/2t.php?url=https://live.445569.xyz/live.m3u'),
-    ('cflive2','https://877622.xyz/2t.php?url=https://m3u.877622.xyz/xymm')
+    ('cf_mitv', 'https://o.877622.xyz/live'),
+    ('cf_m3u','https://877622.xyz/2t.php?url=https://m3u.877622.xyz/'),
+    ('xymm','https://xymm.1000s.dpdns.org/txt')
+    
 ]
 
 # 3. 频道分类配置
