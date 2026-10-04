@@ -37,7 +37,7 @@ NOW新闻台,http://45.192.97.170:8880/play/581.m3u8
 美亚电影台,http://45.192.97.170:8880/play/2329.m3u8
 央视频道,#genre#
 player=2
-CCTV1,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv1_mbd.m3u8?auth_key=1791151028-1-d0e6f7cac4ac4a819107068dbf468179-945fd7c36bea59b30a614d23fe875b92&yid=d0e6f7cac4ac4a819107068dbf468179
+CCTV1,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv1_mbd.m3u8?auth_key=1791168987-1-390653c718be478f911e0a423d223cf0-9255245acf977845a5c9990e1454cc37&yid=390653c718be478f911e0a423d223cf0
 CCTV1,http://45.192.97.170:8880/play/1.m3u8
 CCTV1,http://45.192.97.170:8880/play/73.m3u8
 CCTV1,http://45.192.97.170:8880/play/133.m3u8
@@ -50,7 +50,7 @@ CCTV1,http://45.192.97.170:8880/play/389.m3u8
 CCTV1,http://45.192.97.170:8880/play/491.m3u8
 CCTV1,http://45.192.97.170:8880/play/573.m3u8
 CCTV1,http://45.192.97.170:8880/play/2173.m3u8
-CCTV2,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv2_mbd.m3u8?auth_key=1791150128-1-dadf95db3ebe459ba910986f60d80185-278c19dabc580c8efc8b263cde70b8b0&yid=dadf95db3ebe459ba910986f60d80185
+CCTV2,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv2_mbd.m3u8?auth_key=1791172904-1-e85bc988342a4f37845cf6ea00e1e7f3-8b1f0a3035cdf1d0663827035c396e9f&yid=e85bc988342a4f37845cf6ea00e1e7f3
 CCTV2,http://45.192.97.170:8880/play/2.m3u8
 CCTV2,http://45.192.97.170:8880/play/74.m3u8
 CCTV2,http://45.192.97.170:8880/play/134.m3u8
@@ -73,7 +73,7 @@ CCTV3,http://45.192.97.170:8880/play/356.m3u8
 CCTV3,http://45.192.97.170:8880/play/391.m3u8
 CCTV3,http://45.192.97.170:8880/play/493.m3u8
 CCTV3,http://45.192.97.170:8880/play/2175.m3u8
-CCTV4,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv4_mbd.m3u8?auth_key=1791151012-1-9725c59e78a349bd90d20a8acaebb197-14bf8e32e496c1e871bfbf638d3ab8f9&yid=9725c59e78a349bd90d20a8acaebb197
+CCTV4,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv4_mbd.m3u8?auth_key=1791173493-1-84ba36a38bf44fb7bd132a244229f7fa-5a2cc7c9500ba81299ed519ffb1ebfd4&yid=84ba36a38bf44fb7bd132a244229f7fa
 CCTV4,http://45.192.97.170:8880/play/4.m3u8
 CCTV4,http://45.192.97.170:8880/play/5.m3u8
 CCTV4,http://45.192.97.170:8880/play/6.m3u8
@@ -125,7 +125,7 @@ CCTV6,http://45.192.97.170:8880/play/655.m3u8
 CCTV6,http://45.192.97.170:8880/play/661.m3u8
 CCTV6,http://45.192.97.170:8880/play/798.m3u8
 CCTV6,http://45.192.97.170:8880/play/2179.m3u8
-CCTV7,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv7_mbd.m3u8?auth_key=1791150997-1-e5ee82af1461436db982694cfec955dd-92312015aa61e45a10b9d1238f20d4b8&yid=e5ee82af1461436db982694cfec955dd
+CCTV7,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv7_mbd.m3u8?auth_key=1791171355-1-8544a3bedd024695b49c2123acf1d931-f01067372e054d7640bf58ff1dc7e111&yid=8544a3bedd024695b49c2123acf1d931
 CCTV7,http://45.192.97.170:8880/play/10.m3u8
 CCTV7,http://45.192.97.170:8880/play/80.m3u8
 CCTV7,http://45.192.97.170:8880/play/140.m3u8
@@ -153,7 +153,7 @@ CCTV8,http://45.192.97.170:8880/play/408.m3u8
 CCTV8,http://45.192.97.170:8880/play/498.m3u8
 CCTV8,http://45.192.97.170:8880/play/2181.m3u8
 CCTV8,http://45.192.97.170:8880/play/2252.m3u8
-CCTV9,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv9_mbd.m3u8?auth_key=1791150984-1-0d2b9ee88de04e60b3e7525c88988146-94b0750efc76667bb34b4157c6f8a658&yid=0d2b9ee88de04e60b3e7525c88988146
+CCTV9,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv9_mbd.m3u8?auth_key=1791173481-1-b040e6812c9547ffbc6ba3ef4dcf3ae0-2c49b4ba9abce9c5196f794e34eda193&yid=b040e6812c9547ffbc6ba3ef4dcf3ae0
 CCTV9,http://45.192.97.170:8880/play/12.m3u8
 CCTV9,http://45.192.97.170:8880/play/82.m3u8
 CCTV9,http://45.192.97.170:8880/play/142.m3u8
@@ -165,7 +165,7 @@ CCTV9,http://45.192.97.170:8880/play/363.m3u8
 CCTV9,http://45.192.97.170:8880/play/397.m3u8
 CCTV9,http://45.192.97.170:8880/play/499.m3u8
 CCTV9,http://45.192.97.170:8880/play/2182.m3u8
-CCTV10,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv10_mbd.m3u8?auth_key=1791150114-1-e42b486ae3624b5db4067451d9e27bd2-7f14aceb870c22851a3f7788053c9142&yid=e42b486ae3624b5db4067451d9e27bd2
+CCTV10,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv10_mbd.m3u8?auth_key=1791171342-1-06d4b072d88c4c06b53630f43825ec45-a4511d961780e5cc5428321f4f1802bc&yid=06d4b072d88c4c06b53630f43825ec45
 CCTV10,http://45.192.97.170:8880/play/13.m3u8
 CCTV10,http://45.192.97.170:8880/play/83.m3u8
 CCTV10,http://45.192.97.170:8880/play/143.m3u8
@@ -188,7 +188,7 @@ CCTV11,http://45.192.97.170:8880/play/365.m3u8
 CCTV11,http://45.192.97.170:8880/play/399.m3u8
 CCTV11,http://45.192.97.170:8880/play/501.m3u8
 CCTV11,http://45.192.97.170:8880/play/2184.m3u8
-CCTV12,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv12_mbd.m3u8?auth_key=1791150971-1-de127579c1cf4a5aae9d9318661a1702-8f959854b75c1462669f63781f3e086d&yid=de127579c1cf4a5aae9d9318661a1702
+CCTV12,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv12_mbd.m3u8?auth_key=1791171327-1-4362f5e52aba422b929e47919b143eab-ca353be540f18f7421a2adaa86057588&yid=4362f5e52aba422b929e47919b143eab
 CCTV12,http://45.192.97.170:8880/play/15.m3u8
 CCTV12,http://45.192.97.170:8880/play/85.m3u8
 CCTV12,http://45.192.97.170:8880/play/145.m3u8
@@ -200,7 +200,7 @@ CCTV12,http://45.192.97.170:8880/play/366.m3u8
 CCTV12,http://45.192.97.170:8880/play/400.m3u8
 CCTV12,http://45.192.97.170:8880/play/502.m3u8
 CCTV12,http://45.192.97.170:8880/play/2185.m3u8
-CCTV13,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv13_mbd.m3u8?auth_key=1791150956-1-48d6e663f5be4b44a901d56c14340e9d-2c83d8a290be9a49be8d6ad496eb1346&yid=48d6e663f5be4b44a901d56c14340e9d
+CCTV13,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv13_mbd.m3u8?auth_key=1791172527-1-68ff9c50053a476c8741d5ab2c2ed225-d16fc9a231016a6bdc7f7d4af3cf59e6&yid=68ff9c50053a476c8741d5ab2c2ed225
 CCTV13,http://45.192.97.170:8880/play/16.m3u8
 CCTV13,http://45.192.97.170:8880/play/49.m3u8
 CCTV13,http://45.192.97.170:8880/play/86.m3u8
@@ -252,7 +252,7 @@ CCTV16,http://45.192.97.170:8880/play/335.m3u8
 CCTV16,http://45.192.97.170:8880/play/370.m3u8
 CCTV16,http://45.192.97.170:8880/play/404.m3u8
 CCTV16,http://45.192.97.170:8880/play/2189.m3u8
-CCTV17,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv17_mbd.m3u8?auth_key=1791150944-1-78e865ccc00a49cd94d3fc23410eeba3-8a245707f93af84ddfbdf529a57e5301&yid=78e865ccc00a49cd94d3fc23410eeba3
+CCTV17,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv17_mbd.m3u8?auth_key=1791173466-1-3d35940fdb7448c8901c23062a5bdb08-01654e391f2b910d15592c48176a3acd&yid=3d35940fdb7448c8901c23062a5bdb08
 CCTV17,http://45.192.97.170:8880/play/19.m3u8
 CCTV17,http://45.192.97.170:8880/play/90.m3u8
 CCTV17,http://45.192.97.170:8880/play/150.m3u8
@@ -263,7 +263,7 @@ CCTV17,http://45.192.97.170:8880/play/353.m3u8
 CCTV17,http://45.192.97.170:8880/play/371.m3u8
 CCTV17,http://45.192.97.170:8880/play/405.m3u8
 CCTV17,http://45.192.97.170:8880/play/2190.m3u8
-CCTV4K,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv4k_mbd.m3u8?auth_key=1791152730-1-1a44a65917d94b85b4c5f7b32995c733-8a3aa1460cbebc2d9275edb6a96bcce3&yid=1a44a65917d94b85b4c5f7b32995c733
+CCTV4K,https://live-play-hls.cctvnews.cctv.com/CCTVChannel/channel_cctv4k_mbd.m3u8?auth_key=1791174331-1-8579267024d94d2996949090a27b1f47-3b77922486fbac64c448ffcc372deb94&yid=8579267024d94d2996949090a27b1f47
 CHC影迷电影,http://45.192.97.170:8880/play/68.m3u8
 CHC动作电影,http://45.192.97.170:8880/play/69.m3u8
 CHC家庭影院,http://45.192.97.170:8880/play/70.m3u8
@@ -550,5 +550,5 @@ player=2
 厦门卫视,http://45.192.97.170:8880/play/2235.m3u8
 陕西卫视,http://45.192.97.170:8880/play/2236.m3u8
 自动更新,#genre#
-[ 10/04 15:28 ],https://jaccong0520.serv00.net/da.mp4
+[ 10/04 21:30 ],https://jaccong0520.serv00.net/da.mp4
 
