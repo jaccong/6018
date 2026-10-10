@@ -2305,5 +2305,5 @@ player=2
 河北卫视,http://45.192.97.170:8880/play/7006.m3u8
 三沙卫视,http://45.192.97.170:8880/play/7082.m3u8
 自动更新,#genre#
-[ 10/10 15:46 ],https://jaccong0520.serv00.net/da.mp4
+[ 10/10 21:59 ],https://jaccong0520.serv00.net/da.mp4
 
