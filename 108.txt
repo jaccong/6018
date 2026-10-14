@@ -448,5 +448,5 @@ player=2
 海峡卫视,http://45.192.97.170:8880/play/653.m3u8
 海峡卫视,http://45.192.97.170:8880/play/654.m3u8
 自动更新,#genre#
-[ 10/14 02:32 ],https://jaccong0520.serv00.net/da.mp4
+[ 10/14 08:39 ],https://jaccong0520.serv00.net/da.mp4
 
