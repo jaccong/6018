@@ -354,5 +354,5 @@ player=2
 厦门卫视,http://45.192.97.170:8880/play/468.m3u8
 云南卫视,http://45.192.97.170:8880/play/469.m3u8
 自动更新,#genre#
-[ 10/18 07:31 ],https://jaccong0520.serv00.net/da.mp4
+[ 10/18 09:35 ],https://jaccong0520.serv00.net/da.mp4
 
