@@ -8,5 +8,5 @@ player=2
 卫视频道,#genre#
 player=2
 自动更新,#genre#
-[ 11/08 08:56 ],https://jaccong0520.serv00.net/da.mp4
+[ 11/08 16:03 ],https://jaccong0520.serv00.net/da.mp4
 
